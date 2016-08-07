@@ -1,12 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { List } from '../../components/List';
 import toggleStore from '../../stores/toggleStore';
+import sessionStore from '../../stores/sessionStore';
+import entityStore from '../../stores/entityStore';
+import userStore from '../../stores/userStore';
+import paginateStore from '../../stores/paginateStore';
+import requestStore from '../../stores/requestStore';
 
 function FollowersList({
   currentUser,
@@ -34,28 +38,6 @@ function FollowersList({
   );
 }
 
-function mapStateToProps(state) {
-  const nextHref = state.paginate[paginateLinkTypes.FOLLOWERS];
-  const requestInProcess = state.request[requestTypes.FOLLOWERS];
-  const isExpanded = state.toggle[toggleTypes.FOLLOWERS];
-
-  return {
-    currentUser: state.session.user,
-    userEntities: state.entities.users,
-    followers: state.user.followers,
-    nextHref,
-    requestInProcess,
-    isExpanded
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onSetToggle: toggleStore.setToggle,
-    onFetchFollowers: bindActionCreators(actions.fetchFollowers, dispatch)
-  };
-}
-
 FollowersList.propTypes = {
   currentUser: React.PropTypes.object,
   userEntities: React.PropTypes.object,
@@ -67,9 +49,17 @@ FollowersList.propTypes = {
   onFetchFollowers: React.PropTypes.func
 };
 
-const FollowersListContainer = connect(mapStateToProps, mapDispatchToProps)(FollowersList);
-
-export {
-  FollowersList,
-  FollowersListContainer
-};
+export default observer(() => {
+  return (
+    <FollowersList
+      currentUser={sessionStore.user}
+      userEntities={entityStore.users}
+      followers={userStore.followers}
+      nextHref={paginateStore.links[paginateLinkTypes.FOLLOWERS]}
+      requestInProcess={requestStore.requests[requestTypes.FOLLOWERS]}
+      isExpanded={toggleStore.toggles[toggleTypes.FOLLOWERS]}
+      onSetToggle={toggleStore.setToggle}
+      onFetchFollowers={actions.fetchFollowers}
+    />
+  );
+});

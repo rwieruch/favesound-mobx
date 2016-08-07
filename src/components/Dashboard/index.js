@@ -1,6 +1,6 @@
 import React from 'react';
 import { StreamActivitiesContainer } from '../../components/StreamActivities';
-import { FollowersListContainer } from '../../components/FollowersList';
+import FollowersList from '../../components/FollowersList';
 import { FollowingsListContainer } from '../../components/FollowingsList';
 import FavoritesList from '../../components/FavoritesList';
 
@@ -12,7 +12,7 @@ function Dashboard() {
       </div>
       <div className="dashboard-side">
         <FollowingsListContainer />
-        <FollowersListContainer />
+        <FollowersList />
         <FavoritesList />
       </div>
     </div>
