@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { addAccessTokenWith } from '../../services/api';
 import { ButtonInline } from '../../components/ButtonInline';
 import toggleStore from '../../stores/toggleStore';
+import sessionStore from '../../stores/sessionStore';
+import playerStore from '../../stores/playerStore';
+import entityStore from '../../stores/entityStore';
 
 class Player extends React.Component {
 
@@ -109,25 +111,6 @@ class Player extends React.Component {
 
 }
 
-function mapStateToProps(state) {
-  return {
-    currentUser: state.session.user,
-    activeTrackId: state.player.activeTrackId,
-    isPlaying: state.player.isPlaying,
-    entities: state.entities,
-    playlist: state.player.playlist,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onTogglePlayTrack: bindActionCreators(actions.togglePlayTrack, dispatch),
-    onSetToggle: toggleStore.setToggle,
-    onActivateIteratedTrack: bindActionCreators(actions.activateIteratedTrack, dispatch),
-    onLike: bindActionCreators(actions.like, dispatch)
-  };
-}
-
 Player.propTypes = {
   currentUser: React.PropTypes.object,
   activeTrackId: React.PropTypes.number,
@@ -140,9 +123,22 @@ Player.propTypes = {
   onLike: React.PropTypes.func
 };
 
-const PlayerContainer = connect(mapStateToProps, mapDispatchToProps)(Player);
-
-export {
-  Player,
-  PlayerContainer
-};
+export default observer(() => {
+  const entities = {
+    users: entityStore.users,
+    tracks: entityStore.tracks,
+  };
+  return (
+    <Player
+      currentUser={sessionStore.user}
+      activeTrackId={playerStore.activeTrackId}
+      isPlaying={playerStore.isPlaying}
+      entities={entities}
+      playlist={playerStore.playlist}
+      onTogglePlayTrack={actions.togglePlayTrack}
+      onSetToggle={toggleStore.setToggle}
+      onActivateIteratedTrack={actions.activateIteratedTrack}
+      onLike={actions.like}
+    />
+  );
+});
