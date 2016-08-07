@@ -3,9 +3,9 @@ import trackSchema from '../../schemas/track';
 import * as actionTypes from '../../constants/actionTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import { unauthApiUrl } from '../../services/api';
-import { setRequestInProcess } from '../../actions/request';
 import { setPaginateLink } from '../../actions/paginate';
 import { mergeEntities } from '../../actions/entities';
+import requestStore from '../../stores/requestStore';
 
 function mergeActivitiesByGenre(activities, genre) {
   return {
@@ -15,15 +15,14 @@ function mergeActivitiesByGenre(activities, genre) {
   };
 }
 
-export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch, getState) => {
+export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch) => {
   const requestType = requestTypes.GENRES;
   const initHref = unauthApiUrl(`tracks?linked_partitioning=1&limit=20&offset=0&tags=${genre}`, '&');
   const url = nextHref || initHref;
-  const requestInProcess = getState().request[requestType];
 
-  if (requestInProcess) { return; }
+  if (requestStore.requests[requestType]) { return; }
 
-  dispatch(setRequestInProcess(true, requestType));
+  requestStore.setRequestInProcess(requestType, true);
 
   return fetch(url)
     .then(response => response.json())
@@ -32,6 +31,6 @@ export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch, getState) 
       dispatch(mergeEntities(normalized.entities));
       dispatch(mergeActivitiesByGenre(normalized.result, genre));
       dispatch(setPaginateLink(data.next_href, genre));
-      dispatch(setRequestInProcess(false, requestType));
+      requestStore.setRequestInProcess(requestType, false);
     });
 };

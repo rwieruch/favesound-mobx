@@ -8,21 +8,20 @@ import trackSchema from '../../schemas/track';
 import * as trackTypes from '../../constants/trackTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
-import { setRequestInProcess } from '../../actions/request';
 import { setPaginateLink } from '../../actions/paginate';
 import { mergeEntities } from '../../actions/entities';
 import { isTrack, toIdAndType } from '../../services/track';
 import { getLazyLoadingUsersUrl } from '../../services/api';
 import userStore from '../../stores/userStore';
+import requestStore from '../../stores/requestStore';
 
-export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch, getState) => {
+export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch) => {
   const requestType = requestTypes.FOLLOWINGS;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'followings?limit=20&offset=0');
-  const requestInProcess = getState().request[requestType];
 
-  if (requestInProcess && !ignoreInProgress) { return; }
+  if (requestStore.requests[requestType] && !ignoreInProgress) { return; }
 
-  dispatch(setRequestInProcess(true, requestType));
+  requestStore.setRequestInProcess(requestType, true);
 
   return fetch(url)
     .then(response => response.json())
@@ -31,18 +30,17 @@ export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch, 
       dispatch(mergeEntities(normalized.entities));
       userStore.followings.push(normalized.result);
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FOLLOWINGS));
-      dispatch(setRequestInProcess(false, requestType));
+      requestStore.setRequestInProcess(requestType, false);
     });
 };
 
-export const fetchActivities = (user, nextHref) => (dispatch, getState) => {
+export const fetchActivities = (user, nextHref) => (dispatch) => {
   const requestType = requestTypes.ACTIVITIES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'activities?limit=20&offset=0');
-  const requestInProcess = getState().request[requestType];
 
-  if (requestInProcess) { return; }
+  if (requestStore.requests[requestType]) { return; }
 
-  dispatch(setRequestInProcess(true, requestType));
+  requestStore.setRequestInProcess(requestType, true);
 
   return fetch(url)
     .then(response => response.json())
@@ -65,18 +63,17 @@ export const fetchActivities = (user, nextHref) => (dispatch, getState) => {
       userStore.activities.push(normalized.result);
 
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.ACTIVITIES));
-      dispatch(setRequestInProcess(false, requestType));
+      requestStore.setRequestInProcess(requestType, false);
     });
 };
 
-export const fetchFollowers = (user, nextHref) => (dispatch, getState) => {
+export const fetchFollowers = (user, nextHref) => (dispatch) => {
   const requestType = requestTypes.FOLLOWERS;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'followers?limit=20&offset=0');
-  const requestInProcess = getState().request[requestType];
 
-  if (requestInProcess) { return; }
+  if (requestStore.requests[requestType]) { return; }
 
-  dispatch(setRequestInProcess(true, requestType));
+  requestStore.setRequestInProcess(requestType, true);
 
   return fetch(url)
     .then(response => response.json())
@@ -85,18 +82,17 @@ export const fetchFollowers = (user, nextHref) => (dispatch, getState) => {
       dispatch(mergeEntities(normalized.entities));
       userStore.followers.push(normalized.result);
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FOLLOWERS));
-      dispatch(setRequestInProcess(false, requestType));
+      requestStore.setRequestInProcess(requestType, false);
     });
 };
 
-export const fetchFavorites = (user, nextHref) => (dispatch, getState) => {
+export const fetchFavorites = (user, nextHref) => (dispatch) => {
   const requestType = requestTypes.FAVORITES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'favorites?linked_partitioning=1&limit=20&offset=0');
-  const requestInProcess = getState().request[requestType];
 
-  if (requestInProcess) { return; }
+  if (requestStore.requests[requestType]) { return; }
 
-  dispatch(setRequestInProcess(true, requestType));
+  requestStore.setRequestInProcess(requestType, true);
 
   return fetch(url)
     .then(response => response.json())
@@ -105,14 +101,13 @@ export const fetchFavorites = (user, nextHref) => (dispatch, getState) => {
       dispatch(mergeEntities(normalized.entities));
       userStore.favorites.push(normalized.result);
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FAVORITES));
-      dispatch(setRequestInProcess(false, requestType));
+      requestStore.setRequestInProcess(requestType, false);
     });
 };
 
 const fetchFavoritesOfFollowing = (user, nextHref) => (dispatch) => {
   // const requestType = requestTypes.FAVORITES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'favorites?linked_partitioning=1&limit=200&offset=0');
-  // const requestInProcess = getState().request[requestType];
 
   return fetch(url)
     .then(response => response.json())

@@ -2,10 +2,10 @@ import { arrayOf, normalize } from 'normalizr';
 import commentSchema from '../../schemas/comment';
 import * as actionTypes from '../../constants/actionTypes';
 import { mergeEntities } from '../../actions/entities';
-import { setRequestInProcess } from '../../actions/request';
 import { setPaginateLink } from '../../actions/paginate';
 import { getLazyLoadingCommentsUrl } from '../../services/api';
 import { getCommentProperty } from '../../services/string';
+import requestStore from '../../stores/requestStore';
 
 function setOpenComments(trackId) {
   return {
@@ -22,15 +22,14 @@ function mergeComments(comments, trackId) {
   };
 }
 
-export const fetchComments = (trackId, nextHref) => (dispatch, getState) => {
+export const fetchComments = (trackId, nextHref) => (dispatch) => {
   const requestProperty = getCommentProperty(trackId);
   const initUrl = 'tracks/' + trackId + '/comments?linked_partitioning=1&limit=20&offset=0';
   const url = getLazyLoadingCommentsUrl(nextHref, initUrl);
-  const requestInProcess = getState().request[requestProperty];
 
-  if (requestInProcess) { return; }
+  if (requestStore.requests[requestProperty]) { return; }
 
-  dispatch(setRequestInProcess(true, requestProperty));
+  requestStore.setRequestInProcess(requestProperty, true);
 
   return fetch(url)
     .then(response => response.json())
@@ -39,7 +38,7 @@ export const fetchComments = (trackId, nextHref) => (dispatch, getState) => {
       dispatch(mergeEntities(normalized.entities));
       dispatch(mergeComments(normalized.result, trackId));
       dispatch(setPaginateLink(data.next_href, requestProperty));
-      dispatch(setRequestInProcess(false, requestProperty));
+      requestStore.setRequestInProcess(requestProperty, false);
     });
 };
 
