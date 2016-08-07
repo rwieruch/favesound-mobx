@@ -2,7 +2,7 @@ import React from 'react';
 import { DEFAULT_GENRE } from '../../constants/genre';
 import Header from '../../components/Header';
 import Player from '../../components/Player';
-import { PlaylistContainer } from '../../components/Playlist';
+import Playlist from '../../components/Playlist';
 
 export default class App extends React.Component {
 
@@ -15,7 +15,7 @@ export default class App extends React.Component {
       <div>
         <Header genre={genre} pathname={pathname} />
           {children}
-        <PlaylistContainer />
+        <Playlist />
         <Player />
       </div>
     );

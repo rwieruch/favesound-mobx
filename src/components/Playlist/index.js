@@ -1,12 +1,14 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { TrackPlaylistContainer } from '../../components/Track';
 import { ButtonInline } from '../../components/ButtonInline';
+import toggleStore from '../../stores/toggleStore';
+import entityStore from '../../stores/entityStore';
+import playerStore from '../../stores/playerStore';
 
 function PlaylistItem({ activity }) {
   return (
@@ -29,11 +31,11 @@ function PlaylistMenu({ onClearPlaylist }) {
   );
 }
 
-function Playlist({ toggle, playlist, trackEntities, onClearPlaylist }) {
+function Playlist({ playlistToggle, playlist, trackEntities, onClearPlaylist }) {
   const playlistClass = classNames(
     'playlist',
     {
-      'playlist-visible': toggle[toggleTypes.PLAYLIST]
+      'playlist-visible': playlistToggle
     }
   );
 
@@ -49,30 +51,20 @@ function Playlist({ toggle, playlist, trackEntities, onClearPlaylist }) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    toggle: state.toggle,
-    playlist: state.player.playlist,
-    trackEntities: state.entities.tracks
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onClearPlaylist: bindActionCreators(actions.clearPlaylist, dispatch),
-  };
-}
-
 Playlist.propTypes = {
-  toggle: React.PropTypes.object,
+  playlistToggle: React.PropTypes.object,
   playlist: React.PropTypes.array,
   trackEntities: React.PropTypes.object,
   onClearPlaylist: React.PropTypes.func
 };
 
-const PlaylistContainer = connect(mapStateToProps, mapDispatchToProps)(Playlist);
-
-export {
-  Playlist,
-  PlaylistContainer
-};
+export default observer(() => {
+  return (
+    <Playlist
+      playlistToggle={toggleStore[toggleTypes.PLAYLIST]}
+      playlist={playerStore.playlist}
+      trackEntities={entityStore.tracks}
+      onClearPlaylist={actions.clearPlaylist}
+    />
+  );
+});
