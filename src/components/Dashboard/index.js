@@ -2,7 +2,7 @@ import React from 'react';
 import { StreamActivitiesContainer } from '../../components/StreamActivities';
 import { FollowersListContainer } from '../../components/FollowersList';
 import { FollowingsListContainer } from '../../components/FollowingsList';
-import { FavoritesListContainer } from '../../components/FavoritesList';
+import FavoritesList from '../../components/FavoritesList';
 
 function Dashboard() {
   return (
@@ -13,7 +13,7 @@ function Dashboard() {
       <div className="dashboard-side">
         <FollowingsListContainer />
         <FollowersListContainer />
-        <FavoritesListContainer />
+        <FavoritesList />
       </div>
     </div>
   );

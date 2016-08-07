@@ -1,12 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { List } from '../../components/List';
 import toggleStore from '../../stores/toggleStore';
+import sessionStore from '../../stores/sessionStore';
+import entityStore from '../../stores/entityStore';
+import userStore from '../../stores/userStore';
+import paginateStore from '../../stores/paginateStore';
+import requestStore from '../../stores/requestStore';
 
 function FavoritesList({
   currentUser,
@@ -34,28 +38,6 @@ function FavoritesList({
   );
 }
 
-function mapStateToProps(state) {
-  const nextHref = state.paginate[paginateLinkTypes.FAVORITES];
-  const requestInProcess = state.request[requestTypes.FAVORITES];
-  const isExpanded = state.toggle[toggleTypes.FAVORITES];
-
-  return {
-    currentUser: state.session.user,
-    trackEntities: state.entities.tracks,
-    favorites: state.user.favorites,
-    nextHref,
-    requestInProcess,
-    isExpanded
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onSetToggle: toggleStore.setToggle,
-    onFetchFavorites: bindActionCreators(actions.fetchFavorites, dispatch)
-  };
-}
-
 FavoritesList.propTypes = {
   currentUser: React.PropTypes.object,
   trackEntities: React.PropTypes.object,
@@ -67,9 +49,17 @@ FavoritesList.propTypes = {
   onFetchFavorites: React.PropTypes.func
 };
 
-const FavoritesListContainer = connect(mapStateToProps, mapDispatchToProps)(FavoritesList);
-
-export {
-  FavoritesList,
-  FavoritesListContainer
-};
+export default observer(() => {
+  return (
+    <FavoritesList
+      currentUser={sessionStore.user}
+      trackEntities={entityStore.tracks}
+      favorites={userStore.favorites}
+      nextHref={paginateStore.links[paginateLinkTypes.FAVORITES]}
+      requestInProcess={requestStore.requests[requestTypes.FAVORITES]}
+      isExpanded={toggleStore.toggles[toggleTypes.FAVORITES]}
+      onSetToggle={toggleStore.setToggle}
+      onFetchFavorites={actions.fetchFavorites}
+    />
+  );
+});
