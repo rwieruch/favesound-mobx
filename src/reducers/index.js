@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import session from './session';
-import user from './user';
 import player from './player';
 import browse from './browse';
 import request from './request';
@@ -13,8 +11,6 @@ import filter from './filter';
 import sort from './sort';
 
 export default combineReducers({
-  session,
-  user,
   player,
   browse,
   request,

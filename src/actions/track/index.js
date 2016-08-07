@@ -1,23 +1,16 @@
-import * as actionTypes from '../../constants/actionTypes';
 import { apiUrl } from '../../services/api';
-import { mergeFavorites } from '../../actions/user';
 import { syncEntities } from '../../actions/entities';
-
-export function removeFromFavorites(trackId) {
-  return {
-    type: actionTypes.REMOVE_FROM_FAVORITES,
-    trackId
-  };
-}
+import { remove } from 'lodash';
+import userStore from '../../stores/userStore';
 
 export const like = (track) => (dispatch) => {
   fetch(apiUrl(`me/favorites/${track.id}`, '?'), { method: track.user_favorite ? 'delete' : 'put' })
     .then(response => response.json())
     .then(() => {
       if (track.user_favorite) {
-        dispatch(removeFromFavorites(track.id));
+        remove(userStore.favorites, (favorite) => favorite.id === track.id);
       } else {
-        dispatch(mergeFavorites([track.id]));
+        userStore.favorites.push(track.id);
       }
 
       const updateEntity = Object.assign({}, track, { user_favorite: !track.user_favorite });

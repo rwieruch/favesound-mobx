@@ -1,11 +1,11 @@
 import flow from 'lodash/fp/flow';
 import map from 'lodash/fp/map';
 import filter from 'lodash/fp/filter';
+import reduce from 'lodash/fp/reduce';
 import { arrayOf, normalize } from 'normalizr';
 import userSchema from '../../schemas/user';
 import trackSchema from '../../schemas/track';
 import * as trackTypes from '../../constants/trackTypes';
-import * as actionTypes from '../../constants/actionTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { setRequestInProcess } from '../../actions/request';
@@ -35,27 +35,6 @@ export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch, 
     });
 };
 
-export function mergeActivities(activities) {
-  return {
-    type: actionTypes.MERGE_ACTIVITIES,
-    activities
-  };
-}
-
-function mergeTrackTypesTrack(tracks) {
-  return {
-    type: actionTypes.MERGE_TRACK_TYPES_TRACK,
-    tracks
-  };
-}
-
-function mergeTrackTypesRepost(reposts) {
-  return {
-    type: actionTypes.MERGE_TRACK_TYPES_REPOST,
-    reposts
-  };
-}
-
 export const fetchActivities = (user, nextHref) => (dispatch, getState) => {
   const requestType = requestTypes.ACTIVITIES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'activities?limit=20&offset=0');
@@ -73,8 +52,8 @@ export const fetchActivities = (user, nextHref) => (dispatch, getState) => {
         map(toIdAndType)
       )(data.collection);
 
-      dispatch(mergeTrackTypesTrack(filter((value) => value.type === trackTypes.TRACK, typeMap)));
-      dispatch(mergeTrackTypesRepost(filter((value) => value.type === trackTypes.TRACK_REPOST, typeMap)));
+      userStore.typeTracks = mergeTrackTypes(userStore.typeTracks, filter((value) => value.type === trackTypes.TRACK, typeMap));
+      userStore.typeReposts = mergeTrackTypes(userStore.typeReposts, filter((value) => value.type === trackTypes.TRACK_REPOST, typeMap));
 
       const activitiesMap = flow(
         filter(isTrack),
@@ -83,19 +62,12 @@ export const fetchActivities = (user, nextHref) => (dispatch, getState) => {
 
       const normalized = normalize(activitiesMap, arrayOf(trackSchema));
       dispatch(mergeEntities(normalized.entities));
-      dispatch(mergeActivities(normalized.result));
+      userStore.activities.push(normalized.result);
 
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.ACTIVITIES));
       dispatch(setRequestInProcess(false, requestType));
     });
 };
-
-export function mergeFollowers(followers) {
-  return {
-    type: actionTypes.MERGE_FOLLOWERS,
-    followers
-  };
-}
 
 export const fetchFollowers = (user, nextHref) => (dispatch, getState) => {
   const requestType = requestTypes.FOLLOWERS;
@@ -111,18 +83,11 @@ export const fetchFollowers = (user, nextHref) => (dispatch, getState) => {
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(userSchema));
       dispatch(mergeEntities(normalized.entities));
-      dispatch(mergeFollowers(normalized.result));
+      userStore.followers.push(normalized.result);
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FOLLOWERS));
       dispatch(setRequestInProcess(false, requestType));
     });
 };
-
-export function mergeFavorites(favorites) {
-  return {
-    type: actionTypes.MERGE_FAVORITES,
-    favorites
-  };
-}
 
 export const fetchFavorites = (user, nextHref) => (dispatch, getState) => {
   const requestType = requestTypes.FAVORITES;
@@ -138,7 +103,7 @@ export const fetchFavorites = (user, nextHref) => (dispatch, getState) => {
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
       dispatch(mergeEntities(normalized.entities));
-      dispatch(mergeFavorites(normalized.result));
+      userStore.favorites.push(normalized.result);
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FAVORITES));
       dispatch(setRequestInProcess(false, requestType));
     });
@@ -184,3 +149,15 @@ export const fetchAllFollowingsWithFavorites = () => (dispatch, getState) => {
     }
   });
 };
+
+function mergeTrackTypes(previousList, incomingList) {
+  const mergeTypes = reduce(countByType, previousList);
+  return mergeTypes(incomingList);
+}
+
+function countByType(result, value) {
+  /* eslint-disable no-param-reassign */
+  result[value.id] = result[value.id] ? result[value.id] + 1 : 1;
+  /* eslint-enable no-param-reassign */
+  return result;
+}
