@@ -3,9 +3,9 @@ import trackSchema from '../../schemas/track';
 import * as actionTypes from '../../constants/actionTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import { unauthApiUrl } from '../../services/api';
-import { setPaginateLink } from '../../actions/paginate';
 import { mergeEntities } from '../../actions/entities';
 import requestStore from '../../stores/requestStore';
+import paginateStore from '../../stores/paginateStore';
 
 function mergeActivitiesByGenre(activities, genre) {
   return {
@@ -30,7 +30,7 @@ export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch) => {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
       dispatch(mergeEntities(normalized.entities));
       dispatch(mergeActivitiesByGenre(normalized.result, genre));
-      dispatch(setPaginateLink(data.next_href, genre));
+      paginateStore.setPaginateLink(genre, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
 };

@@ -2,10 +2,10 @@ import { arrayOf, normalize } from 'normalizr';
 import commentSchema from '../../schemas/comment';
 import * as actionTypes from '../../constants/actionTypes';
 import { mergeEntities } from '../../actions/entities';
-import { setPaginateLink } from '../../actions/paginate';
 import { getLazyLoadingCommentsUrl } from '../../services/api';
 import { getCommentProperty } from '../../services/string';
 import requestStore from '../../stores/requestStore';
+import paginateStore from '../../stores/paginateStore';
 
 function setOpenComments(trackId) {
   return {
@@ -37,7 +37,7 @@ export const fetchComments = (trackId, nextHref) => (dispatch) => {
       const normalized = normalize(data.collection, arrayOf(commentSchema));
       dispatch(mergeEntities(normalized.entities));
       dispatch(mergeComments(normalized.result, trackId));
-      dispatch(setPaginateLink(data.next_href, requestProperty));
+      paginateStore.setPaginateLink(requestProperty, data.next_href);
       requestStore.setRequestInProcess(requestProperty, false);
     });
 };

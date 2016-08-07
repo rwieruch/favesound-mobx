@@ -8,12 +8,12 @@ import trackSchema from '../../schemas/track';
 import * as trackTypes from '../../constants/trackTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
-import { setPaginateLink } from '../../actions/paginate';
 import { mergeEntities } from '../../actions/entities';
 import { isTrack, toIdAndType } from '../../services/track';
 import { getLazyLoadingUsersUrl } from '../../services/api';
 import userStore from '../../stores/userStore';
 import requestStore from '../../stores/requestStore';
+import paginateStore from '../../stores/paginateStore';
 
 export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch) => {
   const requestType = requestTypes.FOLLOWINGS;
@@ -29,7 +29,7 @@ export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch) 
       const normalized = normalize(data.collection, arrayOf(userSchema));
       dispatch(mergeEntities(normalized.entities));
       userStore.followings.push(normalized.result);
-      dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FOLLOWINGS));
+      paginateStore.setPaginateLink(paginateLinkTypes.FOLLOWINGS, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
 };
@@ -62,7 +62,7 @@ export const fetchActivities = (user, nextHref) => (dispatch) => {
       dispatch(mergeEntities(normalized.entities));
       userStore.activities.push(normalized.result);
 
-      dispatch(setPaginateLink(data.next_href, paginateLinkTypes.ACTIVITIES));
+      paginateStore.setPaginateLink(paginateLinkTypes.ACTIVITIES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
 };
@@ -81,7 +81,7 @@ export const fetchFollowers = (user, nextHref) => (dispatch) => {
       const normalized = normalize(data.collection, arrayOf(userSchema));
       dispatch(mergeEntities(normalized.entities));
       userStore.followers.push(normalized.result);
-      dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FOLLOWERS));
+      paginateStore.setPaginateLink(paginateLinkTypes.FOLLOWERS, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
 };
@@ -100,7 +100,7 @@ export const fetchFavorites = (user, nextHref) => (dispatch) => {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
       dispatch(mergeEntities(normalized.entities));
       userStore.favorites.push(normalized.result);
-      dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FAVORITES));
+      paginateStore.setPaginateLink(paginateLinkTypes.FAVORITES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
 };
