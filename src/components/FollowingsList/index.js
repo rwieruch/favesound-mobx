@@ -1,12 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { List } from '../../components/List';
 import toggleStore from '../../stores/toggleStore';
+import sessionStore from '../../stores/sessionStore';
+import entityStore from '../../stores/entityStore';
+import userStore from '../../stores/userStore';
+import paginateStore from '../../stores/paginateStore';
+import requestStore from '../../stores/requestStore';
 
 function FollowingsList({
   currentUser,
@@ -34,28 +38,6 @@ function FollowingsList({
   );
 }
 
-function mapStateToProps(state) {
-  const nextHref = state.paginate[paginateLinkTypes.FOLLOWINGS];
-  const requestInProcess = state.request[requestTypes.FOLLOWINGS];
-  const isExpanded = state.toggle[toggleTypes.FOLLOWINGS];
-
-  return {
-    currentUser: state.session.user,
-    userEntities: state.entities.users,
-    followings: state.user.followings,
-    nextHref,
-    requestInProcess,
-    isExpanded
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onSetToggle: toggleStore.setToggle,
-    onFetchFollowings: bindActionCreators(actions.fetchFollowings, dispatch)
-  };
-}
-
 FollowingsList.propTypes = {
   currentUser: React.PropTypes.object,
   userEntities: React.PropTypes.object,
@@ -67,9 +49,17 @@ FollowingsList.propTypes = {
   onFetchFollowings: React.PropTypes.func
 };
 
-const FollowingsListContainer = connect(mapStateToProps, mapDispatchToProps)(FollowingsList);
-
-export {
-  FollowingsList,
-  FollowingsListContainer
-};
+export default observer(() => {
+  return (
+    <FollowingsList
+      currentUser={sessionStore.user}
+      userEntities={entityStore.users}
+      followings={userStore.followings}
+      nextHref={paginateStore.links[paginateLinkTypes.FOLLOWINGS]}
+      requestInProcess={requestStore.requests[requestTypes.FOLLOWINGS]}
+      isExpanded={toggleStore.toggles[toggleTypes.FOLLOWINGS]}
+      onSetToggle={toggleStore.setToggle}
+      onFetchFollowings={actions.fetchFollowings}
+    />
+  );
+});
