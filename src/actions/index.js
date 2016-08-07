@@ -7,7 +7,6 @@ import { like } from './track';
 import { follow } from './following';
 import { activateTrack, activateIteratedTrack, addTrackToPlaylist, removeTrackFromPlaylist, clearPlaylist, togglePlayTrack } from './player';
 import { openComments, fetchComments } from './comments';
-import { filterDuration, filterName } from './filter';
 /* eslint-enable max-len */
 
 export {
@@ -29,6 +28,4 @@ export {
   fetchActivitiesByGenre,
   openComments,
   fetchComments,
-  filterDuration,
-  filterName
 };
