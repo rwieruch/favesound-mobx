@@ -2,7 +2,6 @@ import reduce from 'lodash/fp/reduce';
 import * as actionTypes from '../../constants/actionTypes';
 
 const initialState = {
-  followings: [],
   activities: [],
   typeReposts: {},
   typeTracks: {},
@@ -12,10 +11,6 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.MERGE_FOLLOWINGS:
-      return mergeFollowings(state, action.followings);
-    case actionTypes.REMOVE_FROM_FOLLOWINGS:
-      return removeFromFollowings(state, action.userId);
     case actionTypes.MERGE_ACTIVITIES:
       return mergeActivities(state, action.activities);
     case actionTypes.MERGE_TRACK_TYPES_TRACK:
@@ -32,10 +27,6 @@ export default function(state = initialState, action) {
       return initialState;
   }
   return state;
-}
-
-function mergeFollowings(state, list) {
-  return { ...state, followings: getConcatList(state.followings, list) };
 }
 
 function mergeActivities(state, list) {
@@ -67,11 +58,6 @@ function mergeFollowers(state, list) {
 
 function mergeFavorites(state, list) {
   return { ...state, favorites: getConcatList(state.favorites, list) };
-}
-
-function removeFromFollowings(state, userId) {
-  const index = state.followings.indexOf(userId);
-  return { ...state, followings: removeWithIndex(state.followings, index) };
 }
 
 function removeFromFavorites(state, trackId) {

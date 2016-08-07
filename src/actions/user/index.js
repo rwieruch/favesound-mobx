@@ -13,13 +13,7 @@ import { setPaginateLink } from '../../actions/paginate';
 import { mergeEntities } from '../../actions/entities';
 import { isTrack, toIdAndType } from '../../services/track';
 import { getLazyLoadingUsersUrl } from '../../services/api';
-
-export function mergeFollowings(followings) {
-  return {
-    type: actionTypes.MERGE_FOLLOWINGS,
-    followings
-  };
-}
+import userStore from '../../stores/userStore';
 
 export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch, getState) => {
   const requestType = requestTypes.FOLLOWINGS;
@@ -35,7 +29,7 @@ export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch, 
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(userSchema));
       dispatch(mergeEntities(normalized.entities));
-      dispatch(mergeFollowings(normalized.result));
+      userStore.followings.push(normalized.result);
       dispatch(setPaginateLink(data.next_href, paginateLinkTypes.FOLLOWINGS));
       dispatch(setRequestInProcess(false, requestType));
     });
@@ -160,7 +154,6 @@ const fetchFavoritesOfFollowing = (user, nextHref) => (dispatch) => {
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
       dispatch(mergeEntities(normalized.entities));
-      // dispatch(mergeFollowingsFavorites(user.id, normalized.result));
     });
 };
 
