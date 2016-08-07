@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
 import { ButtonGhost } from '../../components/ButtonGhost';
 
@@ -22,29 +21,17 @@ function TrackActions({ onOpenComments, onAddTrackToPlaylist }) {
   );
 }
 
-function mapStateToProps(state, props) {
-  return {
-    activity: props.activity
-  };
-}
-
-function mapDispatchToProps(dispatch, props) {
-  const { activity } = props;
-
-  return {
-    onOpenComments: () => bindActionCreators(actions.openComments, dispatch)(activity.id),
-    onAddTrackToPlaylist: () => bindActionCreators(actions.addTrackToPlaylist, dispatch)(activity),
-  };
-}
-
 TrackActions.propTypes = {
   onOpenComments: React.PropTypes.func,
   onAddTrackToPlaylist: React.PropTypes.func,
 };
 
-const TrackActionsContainer = connect(mapStateToProps, mapDispatchToProps)(TrackActions);
-
-export {
-  TrackActions,
-  TrackActionsContainer
-};
+export default observer(({ activity }) => {
+  return (
+    <TrackActions
+      activity={activity}
+      onOpenComments={actions.openComments}
+      onAddTrackToPlaylist={actions.addTrackToPlaylist}
+    />
+  );
+});

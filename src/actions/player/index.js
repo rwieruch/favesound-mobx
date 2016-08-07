@@ -19,62 +19,62 @@ export function togglePlayTrack(isPlaying) {
   playerStore.setIsPlaying(isPlaying);
 }
 
-export const activateTrack = (trackId) => (dispatch, getState) => {
-  const playlist = getState().player.playlist;
-  const previousActiveTrackId = getState().player.activeTrackId;
-  const isCurrentlyPlaying = getState().player.isPlaying;
+export function activateTrack(trackId) {
+  const playlist = playerStore.playlist;
+  const previousActiveTrackId = playerStore.activeTrackId;
+  const isCurrentlyPlaying = playerStore.isPlaying;
   const isPlaying = !isSameTrackAndPlaying(previousActiveTrackId, trackId, isCurrentlyPlaying);
 
-  dispatch(togglePlayTrack(isPlaying));
+  togglePlayTrack(isPlaying);
   playerStore.setActiveTrack(trackId);
 
   if (!isInPlaylist(playlist, trackId)) {
     playerStore.setTrackInPlaylist(trackId);
   }
-};
+}
 
-export const addTrackToPlaylist = (track) => (dispatch, getState) => {
-  const playlist = getState().player.playlist;
+export function addTrackToPlaylist(track) {
+  const playlist = playerStore.playlist;
 
   if (!isInPlaylist(playlist, track.id)) {
     playerStore.setTrackInPlaylist(track.id);
   }
 
   if (!playlist.length) {
-    dispatch(activateTrack(track.id));
+    activateTrack(track.id);
   }
-};
+}
 
 function getIteratedTrack(playlist, currentActiveTrackId, iterate) {
   const index = findIndex(isSameTrack(currentActiveTrackId), playlist);
   return playlist[index + iterate];
 }
 
-export const activateIteratedTrack = (currentActiveTrackId, iterate) => (dispatch, getState) => {
-  const playlist = getState().player.playlist;
+export function activateIteratedTrack(currentActiveTrackId, iterate) {
+  const playlist = playerStore.playlist;
   const nextActiveTrackId = getIteratedTrack(playlist, currentActiveTrackId, iterate);
 
   if (nextActiveTrackId) {
-    dispatch(activateTrack(nextActiveTrackId));
+    activateTrack(nextActiveTrackId);
   } else {
-    dispatch(togglePlayTrack(false));
+    togglePlayTrack(false);
   }
-};
+}
 
-export const removeTrackFromPlaylist = (track) => (dispatch, getState) => {
-  const activeTrackId = getState().player.activeTrackId;
-  const isPlaying = getState().player.isPlaying;
+export function removeTrackFromPlaylist(track) {
+  const activeTrackId = playerStore.activeTrackId;
+  const isPlaying = playerStore.isPlaying;
   const isRelevantTrack = isSameTrackAndPlaying(activeTrackId, track.id, isPlaying);
 
   if (isRelevantTrack) {
-    dispatch(activateIteratedTrack(activeTrackId, 1));
+    activateIteratedTrack(activeTrackId, 1);
   }
 
-  const playlistSize = getState().player.playlist.length;
+  const playlistSize = playerStore.playlist.length;
   if (playlistSize < 2) {
     playerStore.deactivateTrack();
     toggleStore.toggles[toggleTypes.PLAYLIST] = false;
   }
 
   playerStore.removeFromPlaylist(track.id);
-};
+}

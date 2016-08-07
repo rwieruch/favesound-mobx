@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import * as sortTypes from '../../constants/sortTypes';
 import * as filterTypes from '../../constants/filterTypes';
 import { WaveformSc } from '../../components/WaveformSc';
-import { TrackActionsContainer } from '../../components/TrackActions';
+import TrackActions from '../../components/TrackActions';
 import { Artwork } from '../../components/Artwork';
 import { ArtworkAction } from '../../components/ArtworkAction';
 import { Permalink } from '../../components/Permalink';
@@ -123,7 +123,7 @@ function TrackStream({
             <InfoList information={information} />
           </div>
           <div className="track-content-footer-actions">
-            <TrackActionsContainer activity={activity} />
+            <TrackActions activity={activity} />
           </div>
         </div>
       </div>
