@@ -2,7 +2,7 @@ import React from 'react';
 import map from '../../services/map';
 import classNames from 'classnames';
 import { TrackPreviewContainer } from '../../components/Track';
-import { UserPreviewContainer } from '../../components/User';
+import UserPreview from '../../components/User';
 import { ButtonMore } from '../../components/ButtonMore';
 import { ButtonInline } from '../../components/ButtonInline';
 
@@ -29,7 +29,7 @@ function SpecificItemTrack({ entities, trackId }) {
 function SpecificItemUser({ entities, userId }) {
   return (
     <li>
-      <UserPreviewContainer user={entities[userId]} />
+      <UserPreview user={entities[userId]} />
     </li>
   );
 }
