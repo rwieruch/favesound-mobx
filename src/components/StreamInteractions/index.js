@@ -1,6 +1,6 @@
 import React from 'react';
 import { FilterDurationContainer } from '../../components/FilterDuration';
-import { SortContainer } from '../../components/Sort';
+import Sort from '../../components/Sort';
 import { FilterNameContainer } from '../../components/FilterName';
 
 function StreamInteractions() {
@@ -10,7 +10,7 @@ function StreamInteractions() {
         <FilterDurationContainer />
       </div>
       <div className="stream-interactions-item">
-        <SortContainer />
+        <Sort />
       </div>
       <div className="stream-interactions-item">
         <FilterNameContainer />

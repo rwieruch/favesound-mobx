@@ -1,22 +1,20 @@
 import React from 'react';
 import map from '../../services/map';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions/index';
 import * as sortTypes from '../../constants/sortTypes';
 import { SORT_NAMES } from '../../constants/sort';
 import { ButtonActive } from '../../components/ButtonActive';
 import { ButtonInline } from '../../components/ButtonInline';
+import sortStore from '../../stores/sortStore';
+import { observer } from 'mobx-react';
 
 function hasActiveSort(activeSort) {
   return activeSort !== sortTypes.NONE;
 }
 
-function Sort({
-  activeSort,
-  onSort,
-}) {
+const Sort = observer(() => {
+  const activeSort = sortStore.sortType;
+
   const sortIconClass = classNames(
     'stream-interaction-icon',
     {
@@ -27,7 +25,7 @@ function Sort({
   return (
     <div className="stream-interaction">
       <div className={sortIconClass} title={'Sort Stream'}>
-        <ButtonInline onClick={() => onSort(sortTypes.NONE)}>
+        <ButtonInline onClick={() => sortStore.setSortType(sortTypes.NONE)}>
           <i className="fa fa-sort" />
         </ButtonInline>
       </div>
@@ -36,7 +34,7 @@ function Sort({
           map((value, key) => {
             return (
               <span key={key}>
-                <ButtonActive onClick={() => onSort(value)} isActive={value === activeSort}>
+                <ButtonActive onClick={() => sortStore.setSortType(value)} isActive={value === activeSort}>
                   {SORT_NAMES[value]}
                 </ButtonActive>
               </span>
@@ -46,28 +44,11 @@ function Sort({
       </div>
     </div>
   );
-}
-
-function mapStateToProps(state) {
-  return {
-    activeSort: state.sort.sortType
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onSort: (sortType) => bindActionCreators(actions.sortStream, dispatch)(sortType)
-  };
-}
+});
 
 Sort.propTypes = {
   activeSort: React.PropTypes.string,
   onSort: React.PropTypes.func
 };
 
-const SortContainer = connect(mapStateToProps, mapDispatchToProps)(Sort);
-
-export {
-  Sort,
-  SortContainer
-};
+export default Sort;
