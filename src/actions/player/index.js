@@ -1,63 +1,23 @@
 import find from 'lodash/fp/find';
 import findIndex from 'lodash/fp/findIndex';
-import * as actionTypes from '../../constants/actionTypes';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { isSameTrackAndPlaying, isSameTrack } from '../../services/player';
 import toggleStore from '../../stores/toggleStore';
+import playerStore from '../../stores/playerStore';
 
-export function setActiveTrack(activeTrackId) {
-  return {
-    type: actionTypes.SET_ACTIVE_TRACK,
-    activeTrackId
-  };
-}
-
-function setIsPlaying(isPlaying) {
-  return {
-    type: actionTypes.SET_IS_PLAYING,
-    isPlaying
-  };
-}
-
-function setTrackInPlaylist(trackId) {
-  return {
-    type: actionTypes.SET_TRACK_IN_PLAYLIST,
-    trackId
-  };
-}
-
-function removeFromPlaylist(trackId) {
-  return {
-    type: actionTypes.REMOVE_TRACK_FROM_PLAYLIST,
-    trackId
-  };
-}
-
-function deactivateTrack() {
-  return {
-    type: actionTypes.RESET_ACTIVE_TRACK,
-  };
-}
-
-function emptyPlaylist() {
-  return {
-    type: actionTypes.RESET_PLAYLIST,
-  };
-}
-
-export const clearPlaylist = () => (dispatch) => {
-  dispatch(emptyPlaylist());
-  dispatch(deactivateTrack());
+export function clearPlaylist() {
+  playerStore.emptyPlaylist();
+  playerStore.deactivateTrack();
   toggleStore.toggles[toggleTypes.PLAYLIST] = false;
-};
+}
 
 function isInPlaylist(playlist, trackId) {
   return find(isSameTrack(trackId), playlist);
 }
 
-export const togglePlayTrack = (isPlaying) => (dispatch) => {
-  dispatch(setIsPlaying(isPlaying));
-};
+export function togglePlayTrack(isPlaying) {
+  playerStore.setIsPlaying(isPlaying);
+}
 
 export const activateTrack = (trackId) => (dispatch, getState) => {
   const playlist = getState().player.playlist;
@@ -66,10 +26,10 @@ export const activateTrack = (trackId) => (dispatch, getState) => {
   const isPlaying = !isSameTrackAndPlaying(previousActiveTrackId, trackId, isCurrentlyPlaying);
 
   dispatch(togglePlayTrack(isPlaying));
-  dispatch(setActiveTrack(trackId));
+  playerStore.setActiveTrack(trackId);
 
   if (!isInPlaylist(playlist, trackId)) {
-    dispatch(setTrackInPlaylist(trackId));
+    playerStore.setTrackInPlaylist(trackId);
   }
 };
 
@@ -77,7 +37,7 @@ export const addTrackToPlaylist = (track) => (dispatch, getState) => {
   const playlist = getState().player.playlist;
 
   if (!isInPlaylist(playlist, track.id)) {
-    dispatch(setTrackInPlaylist(track.id));
+    playerStore.setTrackInPlaylist(track.id);
   }
 
   if (!playlist.length) {
@@ -112,9 +72,9 @@ export const removeTrackFromPlaylist = (track) => (dispatch, getState) => {
 
   const playlistSize = getState().player.playlist.length;
   if (playlistSize < 2) {
-    dispatch(deactivateTrack());
+    playerStore.deactivateTrack();
     toggleStore.toggles[toggleTypes.PLAYLIST] = false;
   }
 
-  dispatch(removeFromPlaylist(track.id));
+  playerStore.removeFromPlaylist(track.id);
 };

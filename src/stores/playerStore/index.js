@@ -1,0 +1,41 @@
+import { observable, action } from 'mobx';
+import { remove } from 'lodash';
+
+class PlayerStore {
+
+  @observable activeTrackId;
+  @observable isPlaying;
+  @observable playlist;
+
+  constructor() {
+    this.activeTrackId = null;
+    this.isPlaying = false;
+    this.playlist = [];
+  }
+
+  @action emptyPlaylist = () => {
+    this.playlist = [];
+  }
+
+  @action removeFromPlaylist = (id) => {
+    remove(this.playlist, (track) => track.id === id);
+  }
+
+  @action setTrackInPlaylist = (id) => {
+    this.playlist.push(id);
+  }
+
+  @action deactivateTrack = () => {
+    this.activeTrackId = null;
+  }
+
+  @action setActiveTrack = (id) => {
+    this.activeTrackId = id;
+  }
+
+}
+
+const playerStore = new PlayerStore();
+
+export default playerStore;
+export { PlayerStore };
