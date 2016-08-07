@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { login, logout } from './session';
-import { changeLocation } from './location';
 import { fetchActivities, fetchFollowers, fetchFavorites, fetchFollowings } from './user';
 import { fetchActivitiesByGenre } from './browse';
 import { like } from './track';
@@ -12,7 +11,6 @@ import { openComments, fetchComments } from './comments';
 export {
   login,
   logout,
-  changeLocation,
   fetchActivities,
   fetchFollowings,
   fetchFollowers,

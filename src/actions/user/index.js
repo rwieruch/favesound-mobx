@@ -8,14 +8,14 @@ import trackSchema from '../../schemas/track';
 import * as trackTypes from '../../constants/trackTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
-import { mergeEntities } from '../../actions/entities';
 import { isTrack, toIdAndType } from '../../services/track';
 import { getLazyLoadingUsersUrl } from '../../services/api';
 import userStore from '../../stores/userStore';
 import requestStore from '../../stores/requestStore';
 import paginateStore from '../../stores/paginateStore';
+import entityStore from '../../stores/entityStore';
 
-export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch) => {
+export function fetchFollowings(user, nextHref, ignoreInProgress) {
   const requestType = requestTypes.FOLLOWINGS;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'followings?limit=20&offset=0');
 
@@ -27,14 +27,15 @@ export const fetchFollowings = (user, nextHref, ignoreInProgress) => (dispatch) 
     .then(response => response.json())
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(userSchema));
-      dispatch(mergeEntities(normalized.entities));
+      entityStore.mergeEntities('tracks', normalized.entities.tracks);
+      entityStore.mergeEntities('users', normalized.entities.users);
       userStore.followings.push(normalized.result);
       paginateStore.setPaginateLink(paginateLinkTypes.FOLLOWINGS, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
-};
+}
 
-export const fetchActivities = (user, nextHref) => (dispatch) => {
+export function fetchActivities(user, nextHref) {
   const requestType = requestTypes.ACTIVITIES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'activities?limit=20&offset=0');
 
@@ -59,15 +60,16 @@ export const fetchActivities = (user, nextHref) => (dispatch) => {
       )(data.collection);
 
       const normalized = normalize(activitiesMap, arrayOf(trackSchema));
-      dispatch(mergeEntities(normalized.entities));
+      entityStore.mergeEntities('tracks', normalized.entities.tracks);
+      entityStore.mergeEntities('users', normalized.entities.users);
       userStore.activities.push(normalized.result);
 
       paginateStore.setPaginateLink(paginateLinkTypes.ACTIVITIES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
-};
+}
 
-export const fetchFollowers = (user, nextHref) => (dispatch) => {
+export function fetchFollowers(user, nextHref) {
   const requestType = requestTypes.FOLLOWERS;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'followers?limit=20&offset=0');
 
@@ -79,14 +81,15 @@ export const fetchFollowers = (user, nextHref) => (dispatch) => {
     .then(response => response.json())
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(userSchema));
-      dispatch(mergeEntities(normalized.entities));
+      entityStore.mergeEntities('tracks', normalized.entities.tracks);
+      entityStore.mergeEntities('users', normalized.entities.users);
       userStore.followers.push(normalized.result);
       paginateStore.setPaginateLink(paginateLinkTypes.FOLLOWERS, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
-};
+}
 
-export const fetchFavorites = (user, nextHref) => (dispatch) => {
+export function fetchFavorites(user, nextHref) {
   const requestType = requestTypes.FAVORITES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'favorites?linked_partitioning=1&limit=20&offset=0');
 
@@ -98,52 +101,13 @@ export const fetchFavorites = (user, nextHref) => (dispatch) => {
     .then(response => response.json())
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
-      dispatch(mergeEntities(normalized.entities));
+      entityStore.mergeEntities('tracks', normalized.entities.tracks);
+      entityStore.mergeEntities('users', normalized.entities.users);
       userStore.favorites.push(normalized.result);
       paginateStore.setPaginateLink(paginateLinkTypes.FAVORITES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
-};
-
-const fetchFavoritesOfFollowing = (user, nextHref) => (dispatch) => {
-  // const requestType = requestTypes.FAVORITES;
-  const url = getLazyLoadingUsersUrl(user, nextHref, 'favorites?linked_partitioning=1&limit=200&offset=0');
-
-  return fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      const normalized = normalize(data.collection, arrayOf(trackSchema));
-      dispatch(mergeEntities(normalized.entities));
-    });
-};
-
-const fetchFavoritesOfFollowings = () => (dispatch, getState) => {
-  const { followings } = getState().user;
-
-  if (followings) {
-    map((following) => {
-      if (!getState().followings[following.id]) {
-        dispatch(fetchFavoritesOfFollowing());
-      }
-    }, followings);
-  }
-};
-
-export const fetchAllFollowingsWithFavorites = () => (dispatch, getState) => {
-  const nextHref = getState().paginate[paginateLinkTypes.FOLLOWINGS];
-  const modifiedNextHref = nextHref ? nextHref.replace("page_size=20", "page_size=199") : null;
-  const ignoreInProgress = true;
-
-  const promise = dispatch(fetchFollowings(null, modifiedNextHref, ignoreInProgress));
-
-  promise.then(() => {
-    dispatch(fetchFavoritesOfFollowings());
-
-    if (getState().paginate[paginateLinkTypes.FOLLOWINGS]) {
-      dispatch(fetchAllFollowingsWithFavorites());
-    }
-  });
-};
+}
 
 function mergeTrackTypes(previousList, incomingList) {
   const mergeTypes = reduce(countByType, previousList);

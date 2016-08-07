@@ -1,9 +1,9 @@
 import { apiUrl } from '../../services/api';
-import { syncEntities } from '../../actions/entities';
 import { remove } from 'lodash';
 import userStore from '../../stores/userStore';
+import entityStore from '../../stores/entityStore';
 
-export const like = (track) => (dispatch) => {
+export function like(track) {
   fetch(apiUrl(`me/favorites/${track.id}`, '?'), { method: track.user_favorite ? 'delete' : 'put' })
     .then(response => response.json())
     .then(() => {
@@ -14,6 +14,6 @@ export const like = (track) => (dispatch) => {
       }
 
       const updateEntity = Object.assign({}, track, { user_favorite: !track.user_favorite });
-      dispatch(syncEntities(updateEntity, 'tracks'));
+      entityStore.syncEntities(updateEntity, 'tracks');
     });
-};
+}
