@@ -7,6 +7,7 @@ import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { addAccessTokenWith } from '../../services/api';
 import { ButtonInline } from '../../components/ButtonInline';
+import toggleStore from '../../stores/toggleStore';
 
 class Player extends React.Component {
 
@@ -121,7 +122,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onTogglePlayTrack: bindActionCreators(actions.togglePlayTrack, dispatch),
-    onSetToggle: bindActionCreators(actions.setToggle, dispatch),
+    onSetToggle: toggleStore.setToggle,
     onActivateIteratedTrack: bindActionCreators(actions.activateIteratedTrack, dispatch),
     onLike: bindActionCreators(actions.like, dispatch)
   };

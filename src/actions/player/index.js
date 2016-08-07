@@ -2,8 +2,8 @@ import find from 'lodash/fp/find';
 import findIndex from 'lodash/fp/findIndex';
 import * as actionTypes from '../../constants/actionTypes';
 import * as toggleTypes from '../../constants/toggleTypes';
-import { resetToggle } from '../../actions/toggle';
 import { isSameTrackAndPlaying, isSameTrack } from '../../services/player';
+import toggleStore from '../../stores/toggleStore';
 
 export function setActiveTrack(activeTrackId) {
   return {
@@ -48,7 +48,7 @@ function emptyPlaylist() {
 export const clearPlaylist = () => (dispatch) => {
   dispatch(emptyPlaylist());
   dispatch(deactivateTrack());
-  dispatch(resetToggle(toggleTypes.PLAYLIST));
+  toggleStore.toggles[toggleTypes.PLAYLIST] = false;
 };
 
 function isInPlaylist(playlist, trackId) {
@@ -113,7 +113,7 @@ export const removeTrackFromPlaylist = (track) => (dispatch, getState) => {
   const playlistSize = getState().player.playlist.length;
   if (playlistSize < 2) {
     dispatch(deactivateTrack());
-    dispatch(resetToggle(toggleTypes.PLAYLIST));
+    toggleStore.toggles[toggleTypes.PLAYLIST] = false;
   }
 
   dispatch(removeFromPlaylist(track.id));

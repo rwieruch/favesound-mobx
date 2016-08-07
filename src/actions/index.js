@@ -5,7 +5,6 @@ import { fetchActivities, fetchFollowers, fetchFavorites, fetchFollowings } from
 import { fetchActivitiesByGenre } from './browse';
 import { like } from './track';
 import { follow } from './following';
-import { setToggle } from './toggle';
 import { activateTrack, activateIteratedTrack, addTrackToPlaylist, removeTrackFromPlaylist, clearPlaylist, togglePlayTrack } from './player';
 import { openComments, fetchComments } from './comments';
 import { filterDuration, filterName } from './filter';
@@ -28,7 +27,6 @@ export {
   activateIteratedTrack,
   like,
   follow,
-  setToggle,
   fetchActivitiesByGenre,
   openComments,
   fetchComments,

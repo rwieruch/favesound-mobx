@@ -6,6 +6,7 @@ import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { List } from '../../components/List';
+import toggleStore from '../../stores/toggleStore';
 
 function FollowingsList({
   currentUser,
@@ -50,7 +51,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSetToggle: bindActionCreators(actions.setToggle, dispatch),
+    onSetToggle: toggleStore.setToggle,
     onFetchFollowings: bindActionCreators(actions.fetchFollowings, dispatch)
   };
 }
