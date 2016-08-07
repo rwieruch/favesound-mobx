@@ -1,12 +1,12 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
 import { Link } from 'react-router';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/index';
 import { GENRES, DEFAULT_GENRE } from '../../constants/genre';
 import { browse, dashboard } from '../../constants/pathnames';
+import sessionStore from '../../stores/sessionStore';
 
 function getGenreLink(genre) {
   return browse + '?genre=' + genre;
@@ -86,21 +86,6 @@ function Header({ currentUser, genre, pathname, onLogin, onLogout }) {
   );
 }
 
-function mapStateToProps(state, props) {
-  return {
-    currentUser: state.session.user,
-    genre: props.genre,
-    pathname: props.pathname
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onLogin: bindActionCreators(actions.login, dispatch),
-    onLogout: bindActionCreators(actions.logout, dispatch),
-  };
-}
-
 Header.propTypes = {
   currentUser: React.PropTypes.object,
   genre: React.PropTypes.string,
@@ -113,9 +98,14 @@ Header.defaultProps = {
   genre: DEFAULT_GENRE
 };
 
-const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header);
-
-export {
-  Header,
-  HeaderContainer
-};
+export default observer(({ genre, pathname }) => {
+  return (
+    <Header
+      currentUser={sessionStore.user}
+      genre={genre}
+      pathname={pathname}
+      onLogin={actions.login}
+      onLogout={actions.logout}
+    />
+  );
+});

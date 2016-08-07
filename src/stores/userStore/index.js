@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 class UserStore {
 
@@ -10,6 +10,15 @@ class UserStore {
   @observable favorites;
 
   constructor() {
+    this.followings = [];
+    this.activities = [];
+    this.typeReposts = {};
+    this.typeTracks = {};
+    this.followers = [];
+    this.favorites = [];
+  }
+
+  @action reset = () => {
     this.followings = [];
     this.activities = [];
     this.typeReposts = {};
