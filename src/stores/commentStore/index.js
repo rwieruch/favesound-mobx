@@ -15,7 +15,7 @@ class CommentStore {
   }
 
   @action mergeComments = (id, comments) => {
-    this.comments = { ...this.comments, ...comments };
+    this.comments[id] = { ...this.comments[id], ...comments };
   }
 
 }

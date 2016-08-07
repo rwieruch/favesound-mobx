@@ -86,9 +86,4 @@ Browse.defaultProps = {
   genre: DEFAULT_GENRE
 };
 
-const BrowseContainer = connect(mapStateToProps, mapDispatchToProps)(Browse);
-
-export {
-  Browse,
-  BrowseContainer
-};
+export default connect(mapStateToProps, mapDispatchToProps)(Browse);

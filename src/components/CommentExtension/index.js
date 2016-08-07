@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions/index';
+import { observer } from 'mobx-react';
 import map from '../../services/map';
+import * as actions from '../../actions/index';
 import { getCommentProperty } from '../../services/string';
 import { ButtonMore } from '../../components/ButtonMore';
 import { Artwork } from '../../components/Artwork';
 import { fromNow } from '../../services/track';
+import entityStore from '../../stores/entityStore';
+import commentStore from '../../stores/commentStore';
+import paginateStore from '../../stores/paginateStore';
+import requestStore from '../../stores/requestStore';
 
 function CommentExtension({
   activity,
@@ -48,30 +51,7 @@ function CommentExtension({
   );
 }
 
-function mapStateToProps(state, props) {
-  const { activity } = props;
-  const requestInProcess = state.request[getCommentProperty(activity.id)];
-  const nextHref = state.paginate[getCommentProperty(activity.id)];
-
-  return {
-    activity,
-    commentIds: state.comment.comments[activity.id],
-    commentEntities: state.entities.comments,
-    userEntities: state.entities.users,
-    requestInProcess,
-    nextHref,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onFetchComments: bindActionCreators(actions.fetchComments, dispatch),
-    // createComment: bindActionCreators(actions.createComment, dispatch),
-  };
-}
-
 CommentExtension.propTypes = {
-  // createComment: React.PropTypes.func,
   onFetchComments: React.PropTypes.func,
   activity: React.PropTypes.object,
   commentIds: React.PropTypes.array,
@@ -81,9 +61,16 @@ CommentExtension.propTypes = {
   nextHref: React.PropTypes.string,
 };
 
-const CommentExtensionContainer = connect(mapStateToProps, mapDispatchToProps)(CommentExtension);
-
-export {
-  CommentExtension,
-  CommentExtensionContainer
-};
+export default observer(({ activity }) => {
+  return (
+    <CommentExtension
+      activity={activity}
+      commentIds={commentStore.comments[activity.id]}
+      commentEntities={entityStore.comments}
+      userEntities={entityStore.users}
+      requestInProcess={requestStore.requests[getCommentProperty(activity.id)]}
+      nextHref={paginateStore.links[getCommentProperty(activity.id)]}
+      onFetchComments={actions.fetchComments}
+    />
+  );
+});

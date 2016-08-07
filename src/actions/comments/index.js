@@ -22,6 +22,7 @@ export function fetchComments(trackId, nextHref) {
       const normalized = normalize(data.collection, arrayOf(commentSchema));
       entityStore.mergeEntities('tracks', normalized.entities.tracks);
       entityStore.mergeEntities('users', normalized.entities.users);
+      entityStore.mergeEntities('comments', normalized.entities.comments);
       commentStore.mergeComments(trackId, normalized.result);
       paginateStore.setPaginateLink(requestProperty, data.next_href);
       requestStore.setRequestInProcess(requestProperty, false);

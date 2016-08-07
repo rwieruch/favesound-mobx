@@ -4,10 +4,12 @@ class EntityStore {
 
   @observable users;
   @observable tracks;
+  @observable comments;
 
   constructor() {
     this.users = {};
     this.tracks = {};
+    this.comments = {};
   }
 
   @action syncEntities = (entity, key) => {

@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/index';
-import { CommentExtensionContainer } from '../../components/CommentExtension';
+import CommentExtension from '../../components/CommentExtension';
 
 function TrackExtension({ activity, isOpenComment }) {
   if (isOpenComment) {
-    return <CommentExtensionContainer activity={activity} />;
+    return <CommentExtension activity={activity} />;
   }
 
   return <noscript />;
