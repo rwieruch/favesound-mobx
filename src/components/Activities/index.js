@@ -3,7 +3,7 @@ import map from '../../services/map';
 import filter from 'lodash/fp/filter';
 import FetchOnScroll from '../../components/FetchOnScroll';
 import { TrackStreamContainer } from '../../components/Track';
-import { TrackExtensionContainer } from '../../components/TrackExtension';
+import TrackExtension from '../../components/TrackExtension';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 function Activity({
@@ -13,7 +13,7 @@ function Activity({
   return (
     <li>
       <TrackStreamContainer activity={activity} idx={idx} />
-      <TrackExtensionContainer activity={activity} />
+      <TrackExtension activity={activity} />
     </li>
   );
 }

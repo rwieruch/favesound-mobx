@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
 import CommentExtension from '../../components/CommentExtension';
+import commentStore from '../../stores/commentStore';
 
 function TrackExtension({ activity, isOpenComment }) {
   if (isOpenComment) {
@@ -12,28 +12,17 @@ function TrackExtension({ activity, isOpenComment }) {
   return <noscript />;
 }
 
-function mapStateToProps(state, props) {
-  const { activity } = props;
-  return {
-    activity,
-    isOpenComment: state.comment.openComments[activity.id]
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    openComments: bindActionCreators(actions.openComments, dispatch),
-  };
-}
-
 TrackExtension.propTypes = {
   activity: React.PropTypes.object,
   openComments: React.PropTypes.func,
 };
 
-const TrackExtensionContainer = connect(mapStateToProps, mapDispatchToProps)(TrackExtension);
-
-export {
-  TrackExtension,
-  TrackExtensionContainer
-};
+export default observer(({ activity }) => {
+  return (
+    <TrackExtension
+      activity={activity}
+      isOpenComment={commentStore.openComments[activity.id]}
+      openComments={actions.openComments}
+    />
+  );
+});
