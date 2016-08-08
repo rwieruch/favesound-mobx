@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import { DEFAULT_GENRE } from '../../constants/genre';
 import { SORT_FUNCTIONS } from '../../constants/sort';
 import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import * as actions from '../../actions/index';
 import * as requestTypes from '../../constants/requestTypes';
 import Activities from '../../components/Activities';
+import entityStore from '../../stores/entityStore';
+import paginateStore from '../../stores/paginateStore';
+import requestStore from '../../stores/requestStore';
+import browseStore from '../../stores/browseStore';
 
 class Browse extends React.Component {
 
@@ -55,23 +58,6 @@ class Browse extends React.Component {
 
 }
 
-function mapStateToProps(state, routerState) {
-  return {
-    genre: routerState.location.query.genre,
-    browseActivities: state.browse,
-    requestsInProcess: state.request,
-    paginateLinks: state.paginate,
-    trackEntities: state.entities.tracks,
-    userEntities: state.entities.users
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchActivitiesByGenre: bindActionCreators(actions.fetchActivitiesByGenre, dispatch)
-  };
-}
-
 Browse.propTypes = {
   genre: React.PropTypes.string,
   browseActivities: React.PropTypes.object,
@@ -86,4 +72,16 @@ Browse.defaultProps = {
   genre: DEFAULT_GENRE
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Browse);
+export default observer(({ location }) => {
+  return (
+    <Browse
+      genre={location.query.genre}
+      browseActivities={browseStore.activitiesByGenre}
+      requestsInProcess={requestStore.requests}
+      paginateLinks={paginateStore.links}
+      trackEntities={entityStore.tracks}
+      userEntities={entityStore.users}
+      fetchActivitiesByGenre={actions.fetchActivitiesByGenre}
+    />
+  );
+});
