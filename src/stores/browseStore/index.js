@@ -9,6 +9,9 @@ class BrowseStore {
   }
 
   @action mergeActivitiesByGenre = (genre, list) => {
+    if (!this.activitiesByGenre[genre]) {
+      this.activitiesByGenre[genre] = [];
+    }
     this.activitiesByGenre[genre].push(list);
   }
 
