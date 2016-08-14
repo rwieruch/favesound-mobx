@@ -19,7 +19,7 @@ export function fetchFollowings(user, nextHref, ignoreInProgress) {
   const requestType = requestTypes.FOLLOWINGS;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'followings?limit=20&offset=0');
 
-  if (requestStore.requests[requestType] && !ignoreInProgress) { return; }
+  if (requestStore.getRequestByType(requestType) && !ignoreInProgress) { return; }
 
   requestStore.setRequestInProcess(requestType, true);
 
@@ -39,7 +39,7 @@ export function fetchActivities(user, nextHref) {
   const requestType = requestTypes.ACTIVITIES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'activities?limit=20&offset=0');
 
-  if (requestStore.requests[requestType]) { return; }
+  if (requestStore.getRequestByType(requestType)) { return; }
 
   requestStore.setRequestInProcess(requestType, true);
 
@@ -73,7 +73,7 @@ export function fetchFollowers(user, nextHref) {
   const requestType = requestTypes.FOLLOWERS;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'followers?limit=20&offset=0');
 
-  if (requestStore.requests[requestType]) { return; }
+  if (requestStore.getRequestByType(requestType)) { return; }
 
   requestStore.setRequestInProcess(requestType, true);
 
@@ -93,7 +93,7 @@ export function fetchFavorites(user, nextHref) {
   const requestType = requestTypes.FAVORITES;
   const url = getLazyLoadingUsersUrl(user, nextHref, 'favorites?linked_partitioning=1&limit=20&offset=0');
 
-  if (requestStore.requests[requestType]) { return; }
+  if (requestStore.getRequestByType(requestType)) { return; }
 
   requestStore.setRequestInProcess(requestType, true);
 

@@ -35,28 +35,19 @@ export default class Browse extends React.Component {
   needToFetchActivities() {
     const { location, browseStore } = this.props;
     const genre = location.query.genre || DEFAULT_GENRE;
-    return !browseStore.activitiesByGenre[genre] || activitiesByGenre[genre].length < 20;
+    return browseStore.getByGenre(genre).length < 20;
   }
 
   render() {
-    const { browseStore, entityStore, paginateStore, requestStore, location } = this.props;
+    const { browseStore, entityStore, requestStore, location } = this.props;
     const genre = location.query.genre || DEFAULT_GENRE;
-    const browseActivities = browseStore.activitiesByGenre;
-    const requestsInProcess = requestStore.requests;
-    const paginateLinks = paginateStore.links;
-    const trackEntities = entityStore.tracks;
-    const userEntities = entityStore.users;
-
-    if (browseStore.activitiesByGenre.get(genre)) {
-      console.log(browseStore);
-      console.log(browseStore.activitiesByGenre, genre, browseStore.activitiesByGenre.get(genre).toJS());
-    }
-
+    const trackEntities = entityStore.getEntitiesByKey('tracks');
+    console.log(trackEntities, browseStore.getByGenre(genre));
     return (
       <div className="browse">
         <Activities
-          requestInProcess={requestsInProcess[requestTypes.GENRES]}
-          ids={browseActivities[genre]}
+          requestInProcess={requestStore.getRequestByType(requestTypes.GENRES)}
+          ids={browseStore.getByGenre(genre)}
           entities={trackEntities}
           activeFilter={DURATION_FILTER_FUNCTIONS.ALL}
           activeSort={SORT_FUNCTIONS.NONE}
@@ -74,20 +65,5 @@ Browse.propTypes = {
   requestsInProcess: React.PropTypes.object,
   paginateLinks: React.PropTypes.object,
   trackEntities: React.PropTypes.object,
-  userEntities: React.PropTypes.object,
   fetchActivitiesByGenre: React.PropTypes.func
 };
-
-// export default observer(({ location }) => {
-//   return (
-//     <Browse
-//       genre={location.query.genre || DEFAULT_GENRE}
-//       browseActivities={browseStore.activitiesByGenre}
-//       requestsInProcess={requestStore.requests}
-//       paginateLinks={paginateStore.links}
-//       trackEntities={entityStore.tracks}
-//       userEntities={entityStore.users}
-//       fetchActivitiesByGenre={actions.fetchActivitiesByGenre}
-//     />
-//   );
-// });

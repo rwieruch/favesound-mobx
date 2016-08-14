@@ -1,4 +1,4 @@
-import { observable, action, extendObservable, map, computed } from 'mobx';
+import { observable, action, map } from 'mobx';
 import { forEach } from 'lodash';
 
 class BrowseStore {
@@ -18,9 +18,8 @@ class BrowseStore {
   }
 
   getByGenre(genre) {
-    return computed(() => {
-        return this.activitiesByGenre.get(genre).toJS();
-    });
+    const byGenre = this.activitiesByGenre.get(genre);
+    return byGenre ? byGenre.toJS() : [];
   }
 
 }

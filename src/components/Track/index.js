@@ -17,7 +17,7 @@ import sortStore from '../../stores/sortStore';
 //       activity={activity}
 //       typeReposts={userStore.typeReposts}
 //       typeTracks={userStore.typeTracks}
-//       userEntities={entityStore.users}
+//       userEntities={entityStore.getEntitiesByKey('users')}
 //       isPlaying={playerStore.isPlaying}
 //       activeTrackId={playerStore.activeTrackId}
 //       activeSortType={sortStore.sortType}
@@ -37,7 +37,7 @@ function TrackContainer(component) {
         activity={activity}
         typeReposts={userStore.typeReposts}
         typeTracks={userStore.typeTracks}
-        userEntities={entityStore.users}
+        userEntities={entityStore.getEntitiesByKey('users')}
         isPlaying={playerStore.isPlaying}
         activeTrackId={playerStore.activeTrackId}
         activeSortType={sortStore.sortType}

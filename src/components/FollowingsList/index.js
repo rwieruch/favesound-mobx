@@ -53,10 +53,10 @@ export default observer(() => {
   return (
     <FollowingsList
       currentUser={sessionStore.user}
-      userEntities={entityStore.users}
+      userEntities={entityStore.getEntitiesByKey('users')}
       followings={userStore.followings}
       nextHref={paginateStore.links[paginateLinkTypes.FOLLOWINGS]}
-      requestInProcess={requestStore.requests[requestTypes.FOLLOWINGS]}
+      requestInProcess={requestStore.getRequestByType(requestTypes.FOLLOWINGS)}
       isExpanded={toggleStore.toggles[toggleTypes.FOLLOWINGS]}
       onSetToggle={toggleStore.setToggle}
       onFetchFollowings={actions.fetchFollowings}

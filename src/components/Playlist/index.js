@@ -63,7 +63,7 @@ export default observer(() => {
     <Playlist
       playlistToggle={toggleStore[toggleTypes.PLAYLIST]}
       playlist={playerStore.playlist}
-      trackEntities={entityStore.tracks}
+      trackEntities={entityStore.getEntitiesByKey('tracks')}
       onClearPlaylist={actions.clearPlaylist}
     />
   );

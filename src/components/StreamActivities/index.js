@@ -58,9 +58,9 @@ export default observer(() => {
   return (
     <StreamActivities
       activities={userStore.activities}
-      requestInProcess={requestStore.requests[requestTypes.ACTIVITIES]}
+      requestInProcess={requestStore.getRequestByType(requestTypes.ACTIVITIES)}
       nextHref={paginateStore.linkgs[paginateLinkTypes.ACTIVITIES]}
-      trackEntities={entityStore.tracks}
+      trackEntities={entityStore.getEntitiesByKey('tracks')}
       activeFilter={getAndCombined(filters)}
       activeSort={SORT_FUNCTIONS[sortStore.sortType]}
       onFetchActivities={actions.fetchActivities}

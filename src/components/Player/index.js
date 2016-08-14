@@ -125,8 +125,8 @@ Player.propTypes = {
 
 export default observer(() => {
   const entities = {
-    users: entityStore.users,
-    tracks: entityStore.tracks,
+    users: entityStore.getEntitiesByKey('users'),
+    tracks: entityStore.getEntitiesByKey('tracks'),
   };
   return (
     <Player

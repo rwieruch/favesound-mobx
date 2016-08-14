@@ -66,9 +66,9 @@ export default observer(({ activity }) => {
     <CommentExtension
       activity={activity}
       commentIds={commentStore.comments[activity.id]}
-      commentEntities={entityStore.comments}
-      userEntities={entityStore.users}
-      requestInProcess={requestStore.requests[getCommentProperty(activity.id)]}
+      commentEntities={entityStore.getEntitiesByKey('comments')}
+      userEntities={entityStore.getEntitiesByKey('users')}
+      requestInProcess={requestStore.getRequestByType(getCommentProperty(activity.id))}
       nextHref={paginateStore.links[getCommentProperty(activity.id)]}
       onFetchComments={actions.fetchComments}
     />

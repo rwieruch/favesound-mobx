@@ -53,10 +53,10 @@ export default observer(() => {
   return (
     <FavoritesList
       currentUser={sessionStore.user}
-      trackEntities={entityStore.tracks}
+      trackEntities={entityStore.getEntitiesByKey('tracks')}
       favorites={userStore.favorites}
       nextHref={paginateStore.links[paginateLinkTypes.FAVORITES]}
-      requestInProcess={requestStore.requests[requestTypes.FAVORITES]}
+      requestInProcess={requestStore.getRequestByType(requestTypes.FAVORITES)}
       isExpanded={toggleStore.toggles[toggleTypes.FAVORITES]}
       onSetToggle={toggleStore.setToggle}
       onFetchFavorites={actions.fetchFavorites}

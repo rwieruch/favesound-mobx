@@ -12,7 +12,7 @@ export function fetchActivitiesByGenre(nextHref, genre) {
   const initHref = unauthApiUrl(`tracks?linked_partitioning=1&limit=20&offset=0&tags=${genre}`, '&');
   const url = nextHref || initHref;
 
-  if (requestStore.requests[requestType]) { return; }
+  if (requestStore.getRequestByType(requestType)) { return; }
 
   requestStore.setRequestInProcess(requestType, true);
 

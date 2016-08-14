@@ -1,23 +1,29 @@
-import { observable, action } from 'mobx';
+import { observable, action, map } from 'mobx';
+import { forEach } from 'lodash';
 
 class EntityStore {
 
-  @observable users;
-  @observable tracks;
-  @observable comments;
+  @observable entities;
 
   constructor() {
-    this.users = {};
-    this.tracks = {};
-    this.comments = {};
+    this.entities = map({});
   }
 
   @action syncEntities = (entity, key) => {
-    this[key][entity.id] = entity;
+    this.entities.get(key).set(entity.id, entity);
   }
 
   @action mergeEntities = (key, entities) => {
-    this[key] = { ...this[key], ...entities };
+    if (!this.entities[key]) {
+      this.entities.set(key, map({}));
+    }
+
+    forEach(entities, (entity, entityKey) => this.entities.get(key).set(entityKey, entity));
+  }
+
+  getEntitiesByKey(key) {
+    const entities = this.entities.get(key);
+    return entities ? entities.toJS() : {};
   }
 
 }

@@ -12,7 +12,7 @@ export function fetchComments(trackId, nextHref) {
   const initUrl = 'tracks/' + trackId + '/comments?linked_partitioning=1&limit=20&offset=0';
   const url = getLazyLoadingCommentsUrl(nextHref, initUrl);
 
-  if (requestStore.requests[requestProperty]) { return; }
+  if (requestStore.getRequestByType(requestProperty)) { return; }
 
   requestStore.setRequestInProcess(requestProperty, true);
 
