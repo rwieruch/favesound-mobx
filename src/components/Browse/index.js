@@ -1,17 +1,14 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { DEFAULT_GENRE } from '../../constants/genre';
 import { SORT_FUNCTIONS } from '../../constants/sort';
 import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import * as actions from '../../actions/index';
 import * as requestTypes from '../../constants/requestTypes';
 import Activities from '../../components/Activities';
-import entityStore from '../../stores/entityStore';
-import paginateStore from '../../stores/paginateStore';
-import requestStore from '../../stores/requestStore';
-import browseStore from '../../stores/browseStore';
 
-class Browse extends React.Component {
+@inject('browseStore', 'entityStore', 'paginateStore', 'requestStore') @observer
+export default class Browse extends React.Component {
 
   constructor(props) {
     super(props);
@@ -29,18 +26,31 @@ class Browse extends React.Component {
   }
 
   fetchActivitiesByGenre() {
-    const { genre, paginateLinks } = this.props;
-    const nextHref = paginateLinks[genre];
-    this.props.fetchActivitiesByGenre(nextHref, genre);
+    const { location, paginateStore } = this.props;
+    const genre = location.query.genre || DEFAULT_GENRE;
+    const nextHref = paginateStore.links[genre];
+    actions.fetchActivitiesByGenre(nextHref, genre);
   }
 
   needToFetchActivities() {
-    const { genre, browseActivities } = this.props;
-    return !browseActivities[genre] || browseActivities[genre].length < 20;
+    const { location, browseStore } = this.props;
+    const genre = location.query.genre || DEFAULT_GENRE;
+    return !browseStore.activitiesByGenre[genre] || activitiesByGenre[genre].length < 20;
   }
 
   render() {
-    const { browseActivities, genre, requestsInProcess, trackEntities } = this.props;
+    const { browseStore, entityStore, paginateStore, requestStore, location } = this.props;
+    const genre = location.query.genre || DEFAULT_GENRE;
+    const browseActivities = browseStore.activitiesByGenre;
+    const requestsInProcess = requestStore.requests;
+    const paginateLinks = paginateStore.links;
+    const trackEntities = entityStore.tracks;
+    const userEntities = entityStore.users;
+
+    if (browseStore.activitiesByGenre.get(genre)) {
+      console.log(browseStore);
+      console.log(browseStore.activitiesByGenre, genre, browseStore.activitiesByGenre.get(genre).toJS());
+    }
 
     return (
       <div className="browse">
@@ -68,20 +78,16 @@ Browse.propTypes = {
   fetchActivitiesByGenre: React.PropTypes.func
 };
 
-Browse.defaultProps = {
-  genre: DEFAULT_GENRE
-};
-
-export default observer(({ location }) => {
-  return (
-    <Browse
-      genre={location.query.genre}
-      browseActivities={browseStore.activitiesByGenre}
-      requestsInProcess={requestStore.requests}
-      paginateLinks={paginateStore.links}
-      trackEntities={entityStore.tracks}
-      userEntities={entityStore.users}
-      fetchActivitiesByGenre={actions.fetchActivitiesByGenre}
-    />
-  );
-});
+// export default observer(({ location }) => {
+//   return (
+//     <Browse
+//       genre={location.query.genre || DEFAULT_GENRE}
+//       browseActivities={browseStore.activitiesByGenre}
+//       requestsInProcess={requestStore.requests}
+//       paginateLinks={paginateStore.links}
+//       trackEntities={entityStore.tracks}
+//       userEntities={entityStore.users}
+//       fetchActivitiesByGenre={actions.fetchActivitiesByGenre}
+//     />
+//   );
+// });

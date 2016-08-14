@@ -1,18 +1,26 @@
-import { observable, action } from 'mobx';
+import { observable, action, extendObservable, map, computed } from 'mobx';
+import { forEach } from 'lodash';
 
 class BrowseStore {
 
   @observable activitiesByGenre;
 
   constructor() {
-    this.activitiesByGenre = {};
+    this.activitiesByGenre = map({});
   }
 
   @action mergeActivitiesByGenre = (genre, list) => {
     if (!this.activitiesByGenre[genre]) {
-      this.activitiesByGenre[genre] = [];
+      this.activitiesByGenre.set(genre, []);
     }
-    this.activitiesByGenre[genre].push(list);
+
+    forEach(list, (item) => this.activitiesByGenre.get(genre).push(item));
+  }
+
+  getByGenre(genre) {
+    return computed(() => {
+        return this.activitiesByGenre.get(genre).toJS();
+    });
   }
 
 }
