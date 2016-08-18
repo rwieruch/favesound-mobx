@@ -33,6 +33,10 @@ class PlayerStore {
     this.activeTrackId = id;
   }
 
+  @action setIsPlaying = (isPlaying) => {
+    this.isPlaying = isPlaying;
+  }
+
 }
 
 const playerStore = new PlayerStore();

@@ -1,15 +1,15 @@
-import { observable, action } from 'mobx';
+import { observable, action, map } from 'mobx';
 
 class ToggleStore {
 
   @observable toggles;
 
   constructor() {
-    this.toggles = {};
+    this.toggles = map({});
   }
 
   @action setToggle = (type) => {
-    this.toggleTypes[type] = !this.toggleTypes[type];
+    this.toggles.set(type, !this.toggles.get(type));
   }
 
 }
