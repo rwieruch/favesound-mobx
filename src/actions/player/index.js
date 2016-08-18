@@ -36,18 +36,25 @@ export function activateTrack(trackId) {
 export function addTrackToPlaylist(track) {
   const playlist = playerStore.playlist;
 
-  if (!isInPlaylist(playlist, track.id)) {
-    playerStore.setTrackInPlaylist(track.id);
-  }
-
   if (!playlist.length) {
     activateTrack(track.id);
+  }
+
+  if (!isInPlaylist(playlist, track.id)) {
+    playerStore.setTrackInPlaylist(track.id);
   }
 }
 
 function getIteratedTrack(playlist, currentActiveTrackId, iterate) {
   const index = findIndex(isSameTrack(currentActiveTrackId), playlist);
-  return playlist[index + iterate];
+  const nextIndex = index + iterate;
+  if (nextIndex < playlist.length && nextIndex > -1) {
+    return playlist[nextIndex];
+  } else if (iterate === 1) {
+    return playlist[0];
+  } else if (iterate === -1) {
+    return playlist[playlist.length - 1];
+  }
 }
 
 export function activateIteratedTrack(currentActiveTrackId, iterate) {
