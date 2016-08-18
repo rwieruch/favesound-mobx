@@ -8,7 +8,7 @@ import * as requestTypes from '../../constants/requestTypes';
 import Activities from '../../components/Activities';
 
 @inject('browseStore', 'entityStore', 'paginateStore', 'requestStore') @observer
-export default class Browse extends React.Component {
+class Browse extends React.Component {
 
   constructor(props) {
     super(props);
@@ -41,14 +41,13 @@ export default class Browse extends React.Component {
   render() {
     const { browseStore, entityStore, requestStore, location } = this.props;
     const genre = location.query.genre || DEFAULT_GENRE;
-    const trackEntities = entityStore.getEntitiesByKey('tracks');
-    console.log(trackEntities, browseStore.getByGenre(genre));
+
     return (
       <div className="browse">
         <Activities
           requestInProcess={requestStore.getRequestByType(requestTypes.GENRES)}
           ids={browseStore.getByGenre(genre)}
-          entities={trackEntities}
+          entities={entityStore.getEntitiesByKey('tracks')}
           activeFilter={DURATION_FILTER_FUNCTIONS.ALL}
           activeSort={SORT_FUNCTIONS.NONE}
           scrollFunction={this.fetchActivitiesByGenre}
@@ -59,7 +58,7 @@ export default class Browse extends React.Component {
 
 }
 
-Browse.propTypes = {
+Browse.wrappedComponent.propTypes = {
   genre: React.PropTypes.string,
   browseActivities: React.PropTypes.object,
   requestsInProcess: React.PropTypes.object,
@@ -67,3 +66,5 @@ Browse.propTypes = {
   trackEntities: React.PropTypes.object,
   fetchActivitiesByGenre: React.PropTypes.func
 };
+
+export default Browse;

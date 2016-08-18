@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import classNames from 'classnames';
 import * as sortTypes from '../../constants/sortTypes';
 import * as filterTypes from '../../constants/filterTypes';
@@ -24,7 +25,7 @@ function Duration({ duration, isActive }) {
   );
 }
 
-function TrackStream({
+const TrackStream = observer(({
   activity,
   activeTrackId,
   isPlaying,
@@ -35,7 +36,7 @@ function TrackStream({
   activeSortType,
   activeDurationFilterType,
   onActivateTrack,
-}) {
+}) => {
   const {
     user,
     title,
@@ -132,7 +133,7 @@ function TrackStream({
       </div>
     </div>
   );
-}
+});
 
 function TrackIcon({ trackCount }) {
   const title = 'Released by ' + getPluralizedWithCount(trackCount, 'guy') + '.';

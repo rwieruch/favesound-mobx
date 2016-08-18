@@ -1,34 +1,60 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import filter from 'lodash/fp/filter';
+import * as actions from '../../actions/index';
 import FetchOnScroll from '../../components/FetchOnScroll';
-import { TrackStreamContainer } from '../../components/Track';
 import TrackExtension from '../../components/TrackExtension';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { TrackStream } from '../../components/Track/stream';
 
-function Activity({
+const Activity = inject(
+  'userStore',
+  'entityStore',
+  'playerStore',
+  'sortStore',
+  'filterStore'
+)(observer(({
   activity,
-  idx
-}) {
+  idx,
+  userStore,
+  entityStore,
+  playerStore,
+  sortStore,
+  filterStore
+}) => {
   return (
     <li>
-      <TrackStreamContainer activity={activity} idx={idx} />
+      <TrackStream
+        idx={idx}
+        activity={activity}
+        typeReposts={userStore.typeReposts}
+        typeTracks={userStore.typeTracks}
+        userEntities={entityStore.getEntitiesByKey('users')}
+        isPlaying={playerStore.isPlaying}
+        activeTrackId={playerStore.activeTrackId}
+        activeSortType={sortStore.sortType}
+        activeDurationFilterType={filterStore.durationFilterType}
+        onActivateTrack={actions.activateTrack}
+        onAddTrackToPlaylist={actions.addTrackToPlaylist}
+        onRemoveTrackFromPlaylist={actions.removeTrackFromPlaylist}
+      />
       <TrackExtension activity={activity} />
     </li>
   );
-}
+}));
 
 function getMatchedEntities(ids, entities) {
   return map((id) => entities[id], ids);
 }
 
-function Activities({
+const Activities = observer(({
   requestInProcess,
   ids,
   entities,
   activeFilter,
   activeSort,
-}) {
+}) => {
   const matchedEntities = getMatchedEntities(ids, entities);
   const filteredEntities = filter(activeFilter, matchedEntities);
   const sortedEntities = activeSort(filteredEntities);
@@ -46,7 +72,7 @@ function Activities({
       <LoadingSpinner isLoading={requestInProcess || !ids} />
     </div>
   );
-}
+});
 
 Activities.propTypes = {
   requestInProcess: React.PropTypes.bool,

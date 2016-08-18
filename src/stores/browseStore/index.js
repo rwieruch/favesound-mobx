@@ -10,7 +10,7 @@ class BrowseStore {
   }
 
   @action mergeActivitiesByGenre = (genre, list) => {
-    if (!this.activitiesByGenre[genre]) {
+    if (!this.activitiesByGenre.get(genre)) {
       this.activitiesByGenre.set(genre, []);
     }
 

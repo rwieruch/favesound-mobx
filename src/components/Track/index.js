@@ -10,25 +10,6 @@ import userStore from '../../stores/userStore';
 import filterStore from '../../stores/filterStore';
 import sortStore from '../../stores/sortStore';
 
-// const TrackPlaylistContainer = observer(({ idx, activity }) => {
-//   return (
-//     <TrackPlaylist
-//       idx={idx}
-//       activity={activity}
-//       typeReposts={userStore.typeReposts}
-//       typeTracks={userStore.typeTracks}
-//       userEntities={entityStore.getEntitiesByKey('users')}
-//       isPlaying={playerStore.isPlaying}
-//       activeTrackId={playerStore.activeTrackId}
-//       activeSortType={sortStore.sortType}
-//       activeDurationFilterType={filterStore.durationFilterType}
-//       onActivateTrack={actions.activateTrack}
-//       onAddTrackToPlaylist={actions.addTrackToPlaylist}
-//       onRemoveTrackFromPlaylist={actions.removeTrackFromPlaylist}
-//     />
-//   );
-// });
-
 function TrackContainer(component) {
   return observer(({ idx, activity }) => {
     return (

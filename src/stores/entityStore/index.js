@@ -14,7 +14,7 @@ class EntityStore {
   }
 
   @action mergeEntities = (key, entities) => {
-    if (!this.entities[key]) {
+    if (!this.entities.get(key)) {
       this.entities.set(key, map({}));
     }
 
