@@ -21,8 +21,8 @@ export default observer(({ activity }) => {
   return (
     <TrackExtension
       activity={activity}
-      isOpenComment={commentStore.openComments[activity.id]}
-      openComments={actions.openComments}
+      isOpenComment={commentStore.openComments.get(activity.id)}
+      openComments={() => actions.openComments(activity.id)}
     />
   );
 });

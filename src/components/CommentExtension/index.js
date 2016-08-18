@@ -1,15 +1,11 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import * as actions from '../../actions/index';
 import { getCommentProperty } from '../../services/string';
 import { ButtonMore } from '../../components/ButtonMore';
 import { Artwork } from '../../components/Artwork';
 import { fromNow } from '../../services/track';
-import entityStore from '../../stores/entityStore';
-import commentStore from '../../stores/commentStore';
-import paginateStore from '../../stores/paginateStore';
-import requestStore from '../../stores/requestStore';
 
 function CommentExtension({
   activity,
@@ -61,11 +57,22 @@ CommentExtension.propTypes = {
   nextHref: React.PropTypes.string,
 };
 
-export default observer(({ activity }) => {
+export default inject(
+  'commentStore',
+  'entityStore',
+  'requestStore',
+  'paginateStore'
+)(observer(({
+  activity,
+  commentStore,
+  entityStore,
+  requestStore,
+  paginateStore
+}) => {
   return (
     <CommentExtension
       activity={activity}
-      commentIds={commentStore.comments[activity.id]}
+      commentIds={commentStore.comments.get(activity.id)}
       commentEntities={entityStore.getEntitiesByKey('comments')}
       userEntities={entityStore.getEntitiesByKey('users')}
       requestInProcess={requestStore.getRequestByType(getCommentProperty(activity.id))}
@@ -73,4 +80,4 @@ export default observer(({ activity }) => {
       onFetchComments={actions.fetchComments}
     />
   );
-});
+}));

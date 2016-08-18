@@ -1,4 +1,5 @@
-import { observable, action } from 'mobx';
+import { observable, action, map } from 'mobx';
+import { forEach } from 'lodash';
 
 class CommentStore {
 
@@ -6,16 +7,20 @@ class CommentStore {
   @observable openComments;
 
   constructor() {
-    this.comments = {};
-    this.openComments = {};
+    this.comments = map({});
+    this.openComments = map({});
   }
 
   @action setOpenComments = (id) => {
-    this.openComments[id] = !this.openComments[id];
+    this.openComments.set(id, !this.openComments.get(id));
   }
 
   @action mergeComments = (id, comments) => {
-    this.comments[id] = { ...this.comments[id], ...comments };
+    if (!this.comments.get(id)) {
+      this.comments.set(id, []);
+    }
+
+    forEach(comments, (comment) => this.comments.get(id).push(comment));
   }
 
 }

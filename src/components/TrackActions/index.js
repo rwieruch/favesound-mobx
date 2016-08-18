@@ -30,8 +30,8 @@ export default observer(({ activity }) => {
   return (
     <TrackActions
       activity={activity}
-      onOpenComments={actions.openComments}
-      onAddTrackToPlaylist={actions.addTrackToPlaylist}
+      onOpenComments={() => actions.openComments(activity.id)}
+      onAddTrackToPlaylist={() => actions.addTrackToPlaylist(activity)}
     />
   );
 });

@@ -30,7 +30,7 @@ export function fetchComments(trackId, nextHref) {
 }
 
 export function openComments(trackId) {
-  const comments = commentStore.comments[trackId];
+  const comments = commentStore.comments.get(trackId);
   commentStore.setOpenComments(trackId, comments);
 
   if (!comments) {
