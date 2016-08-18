@@ -1,12 +1,11 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 import * as actions from '../../actions/index';
 import { GENRES, DEFAULT_GENRE } from '../../constants/genre';
 import { browse, dashboard } from '../../constants/pathnames';
-import sessionStore from '../../stores/sessionStore';
 
 function getGenreLink(genre) {
   return browse + '?genre=' + genre;
@@ -23,7 +22,7 @@ function Logo({ genre }) {
 }
 
 function MenuItem({ pathname, selectedGenre, genre }) {
-  if (pathname !== browse) { return null; }
+  if (pathname === dashboard) { return null; }
 
   const linkClass = classNames(
     'menu-item',
@@ -74,38 +73,32 @@ function MenuList({ selectedGenre, pathname }) {
   );
 }
 
-function Header({ currentUser, genre, pathname, onLogin, onLogout }) {
+const Header = inject(
+  'sessionStore'
+)(observer(({
+  genre,
+  pathname,
+  sessionStore
+}) => {
   return (
     <div className="header">
       <div className="header-content">
         <Logo genre={genre} />
         <MenuList selectedGenre={genre} pathname={pathname} />
-        <SessionAction currentUser={currentUser} onLogin={onLogin} onLogout={onLogout} />
+        <SessionAction currentUser={sessionStore.user} onLogin={actions.login} onLogout={actions.logout} />
       </div>
     </div>
   );
-}
+}));
 
 Header.propTypes = {
-  currentUser: React.PropTypes.object,
+  sessionStore: React.PropTypes.object,
   genre: React.PropTypes.string,
   pathname: React.PropTypes.string,
-  onLogin: React.PropTypes.func,
-  onLogout: React.PropTypes.func,
 };
 
-Header.defaultProps = {
+Header.wrappedComponent.defaultProps = {
   genre: DEFAULT_GENRE
 };
 
-export default observer(({ genre, pathname }) => {
-  return (
-    <Header
-      currentUser={sessionStore.user}
-      genre={genre}
-      pathname={pathname}
-      onLogin={actions.login}
-      onLogout={actions.logout}
-    />
-  );
-});
+export default Header;
