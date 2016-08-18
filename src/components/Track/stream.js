@@ -26,10 +26,10 @@ function Duration({ duration, isActive }) {
 }
 
 const TrackStream = observer(({
+  idx,
   activity,
   activeTrackId,
   isPlaying,
-  idx,
   userEntities,
   typeReposts,
   typeTracks,

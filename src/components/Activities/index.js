@@ -41,7 +41,6 @@ const Activity = inject(
         activeDurationFilterType={filterStore.durationFilterType}
         onActivateTrack={actions.activateTrack}
         onAddTrackToPlaylist={actions.addTrackToPlaylist}
-        onRemoveTrackFromPlaylist={actions.removeTrackFromPlaylist}
       />
       <TrackExtension activity={activity} />
     </li>
