@@ -18,7 +18,7 @@ class PlayerStore {
   }
 
   @action removeFromPlaylist = (id) => {
-    remove(this.playlist, (track) => track.id === id);
+    remove(this.playlist, (trackId) => trackId === id);
   }
 
   @action setTrackInPlaylist = (id) => {

@@ -8,6 +8,10 @@ import TrackExtension from '../../components/TrackExtension';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrackStream } from '../../components/Track/stream';
 
+function getMatchedEntities(ids, entities) {
+  return map((id) => entities[id], ids);
+}
+
 const Activity = inject(
   'userStore',
   'entityStore',
@@ -43,10 +47,6 @@ const Activity = inject(
     </li>
   );
 }));
-
-function getMatchedEntities(ids, entities) {
-  return map((id) => entities[id], ids);
-}
 
 const Activities = observer(({
   requestInProcess,

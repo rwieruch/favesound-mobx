@@ -100,7 +100,7 @@ class Player extends React.Component {
 
 }
 
-Player.propTypes = {
+Player.wrappedComponent.propTypes = {
   sessionStore: React.PropTypes.object,
   entityStore: React.PropTypes.object,
   playerStore: React.PropTypes.object,

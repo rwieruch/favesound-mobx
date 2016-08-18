@@ -8,7 +8,7 @@ import playerStore from '../../stores/playerStore';
 export function clearPlaylist() {
   playerStore.emptyPlaylist();
   playerStore.deactivateTrack();
-  toggleStore.toggles[toggleTypes.PLAYLIST] = false;
+  toggleStore.setToggle(toggleTypes.PLAYLIST);
 }
 
 function isInPlaylist(playlist, trackId) {
@@ -73,7 +73,7 @@ export function removeTrackFromPlaylist(track) {
   const playlistSize = playerStore.playlist.length;
   if (playlistSize < 2) {
     playerStore.deactivateTrack();
-    toggleStore.toggles[toggleTypes.PLAYLIST] = false;
+    toggleStore.setToggle(toggleTypes.PLAYLIST);
   }
 
   playerStore.removeFromPlaylist(track.id);

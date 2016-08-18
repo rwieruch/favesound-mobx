@@ -1,24 +1,37 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
-import { TrackPlaylistContainer } from '../../components/Track';
+import { TrackPlaylist } from '../../components/Track/playlist';
 import { ButtonInline } from '../../components/ButtonInline';
-import toggleStore from '../../stores/toggleStore';
-import entityStore from '../../stores/entityStore';
-import playerStore from '../../stores/playerStore';
 
-function PlaylistItem({ activity }) {
+const PlaylistItem = inject(
+  'entityStore',
+  'playerStore'
+)(observer(({
+  activity,
+  entityStore,
+  playerStore
+}) => {
   return (
     <li>
-      <TrackPlaylistContainer activity={activity} />
+      <TrackPlaylist
+        activity={activity}
+        userEntities={entityStore.getEntitiesByKey('users')}
+        isPlaying={playerStore.isPlaying}
+        activeTrackId={playerStore.activeTrackId}
+        onActivateTrack={actions.activateTrack}
+        onRemoveTrackFromPlaylist={actions.removeTrackFromPlaylist}
+      />
     </li>
   );
-}
+}));
 
-function PlaylistMenu({ onClearPlaylist }) {
+const PlaylistMenu = observer(({
+  onClearPlaylist
+}) => {
   return (
     <div className="playlist-menu">
       <div>Player Queue</div>
@@ -29,9 +42,21 @@ function PlaylistMenu({ onClearPlaylist }) {
       </div>
     </div>
   );
-}
+});
 
-function Playlist({ playlistToggle, playlist, trackEntities, onClearPlaylist }) {
+const Playlist = inject(
+  'entityStore',
+  'playerStore',
+  'toggleStore'
+)(observer(({
+  entityStore,
+  playerStore,
+  toggleStore
+}) => {
+  const playlistToggle = toggleStore.toggles.get(toggleTypes.PLAYLIST);
+  const playlist = playerStore.playlist;
+  const trackEntities = entityStore.getEntitiesByKey('tracks');
+
   const playlistClass = classNames(
     'playlist',
     {
@@ -41,7 +66,7 @@ function Playlist({ playlistToggle, playlist, trackEntities, onClearPlaylist }) 
 
   return (
     <div className={playlistClass}>
-      <PlaylistMenu onClearPlaylist={onClearPlaylist} />
+      <PlaylistMenu onClearPlaylist={actions.clearPlaylist} />
       <ul>
         {map((id, idx) => {
           return <PlaylistItem key={idx} activity={trackEntities[id]} />;
@@ -49,22 +74,12 @@ function Playlist({ playlistToggle, playlist, trackEntities, onClearPlaylist }) 
       </ul>
     </div>
   );
-}
+}));
 
-Playlist.propTypes = {
-  playlistToggle: React.PropTypes.object,
-  playlist: React.PropTypes.array,
-  trackEntities: React.PropTypes.object,
-  onClearPlaylist: React.PropTypes.func
+Playlist.wrappedComponent.propTypes = {
+  entityStore: React.PropTypes.object,
+  playerStore: React.PropTypes.object,
+  toggleStore: React.PropTypes.object,
 };
 
-export default observer(() => {
-  return (
-    <Playlist
-      playlistToggle={toggleStore[toggleTypes.PLAYLIST]}
-      playlist={playerStore.playlist}
-      trackEntities={entityStore.getEntitiesByKey('tracks')}
-      onClearPlaylist={actions.clearPlaylist}
-    />
-  );
-});
+export default Playlist;
