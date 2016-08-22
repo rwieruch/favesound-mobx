@@ -1,5 +1,4 @@
 import { apiUrl } from '../../services/api';
-import { remove } from 'lodash';
 import userStore from '../../stores/userStore';
 import entityStore from '../../stores/entityStore';
 
@@ -8,9 +7,9 @@ export function like(track) {
     .then(response => response.json())
     .then(() => {
       if (track.user_favorite) {
-        remove(userStore.favorites, (favorite) => favorite.id === track.id);
+        userStore.removeFromFavorites(track.id);
       } else {
-        userStore.favorites.push(track.id);
+        userStore.mergeFavorites([track.id]);
       }
 
       const updateEntity = Object.assign({}, track, { user_favorite: !track.user_favorite });

@@ -1,4 +1,4 @@
-import { FavoritesList } from './index';
+import FavoritesList from './index';
 import { shallow } from 'enzyme';
 
 describe('FavoritesList', () => {

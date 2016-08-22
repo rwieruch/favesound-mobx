@@ -1,42 +1,46 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { List } from '../../components/List';
-import toggleStore from '../../stores/toggleStore';
-import sessionStore from '../../stores/sessionStore';
-import entityStore from '../../stores/entityStore';
-import userStore from '../../stores/userStore';
-import paginateStore from '../../stores/paginateStore';
-import requestStore from '../../stores/requestStore';
 
-function FavoritesList({
-  currentUser,
-  trackEntities,
-  favorites,
-  nextHref,
-  requestInProcess,
-  isExpanded,
-  onSetToggle,
-  onFetchFavorites
-}) {
+const FavoritesList = inject(
+  'sessionStore',
+  'userStore',
+  'entityStore',
+  'paginateStore',
+  'requestStore',
+  'toggleStore'
+)(observer(({
+  sessionStore,
+  userStore,
+  entityStore,
+  paginateStore,
+  requestStore,
+  toggleStore
+}) => {
+  const trackEntities = entityStore.getEntitiesByKey('tracks');
+  const nextHref = paginateStore.getLinkByType(paginateLinkTypes.FAVORITES);
+  const requestInProcess = requestStore.getRequestByType(requestTypes.FAVORITES);
+  const isExpanded = toggleStore.toggles.get(toggleTypes.FAVORITES);
+
   return (
     <List
       title="Favorites"
-      ids={favorites}
+      ids={userStore.favorites}
       entities={trackEntities}
       nextHref={nextHref}
       requestInProcess={requestInProcess}
       isExpanded={isExpanded}
-      currentUser={currentUser}
-      onToggleMore={() => onSetToggle(toggleTypes.FAVORITES)}
-      onFetchMore={() => onFetchFavorites(currentUser, nextHref)}
+      currentUser={sessionStore.user}
+      onToggleMore={() => toggleStore.setToggle(toggleTypes.FAVORITES)}
+      onFetchMore={() => actions.fetchFavorites(sessionStore.user, nextHref)}
       kind="TRACK"
     />
   );
-}
+}));
 
 FavoritesList.propTypes = {
   currentUser: React.PropTypes.object,
@@ -49,17 +53,4 @@ FavoritesList.propTypes = {
   onFetchFavorites: React.PropTypes.func
 };
 
-export default observer(() => {
-  return (
-    <FavoritesList
-      currentUser={sessionStore.user}
-      trackEntities={entityStore.getEntitiesByKey('tracks')}
-      favorites={userStore.favorites}
-      nextHref={paginateStore.links[paginateLinkTypes.FAVORITES]}
-      requestInProcess={requestStore.getRequestByType(requestTypes.FAVORITES)}
-      isExpanded={toggleStore.toggles[toggleTypes.FAVORITES]}
-      onSetToggle={toggleStore.setToggle}
-      onFetchFavorites={actions.fetchFavorites}
-    />
-  );
-});
+export default FavoritesList;

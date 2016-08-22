@@ -12,6 +12,10 @@ class PaginateStore {
     this.links[paginateType] = nextHref;
   }
 
+  getLinkByType(paginateType) {
+    return this.links[paginateType];
+  }
+
 }
 
 const paginateStore = new PaginateStore();

@@ -6,27 +6,25 @@ import { InputMenu } from '../../components/InputMenu';
 import filterStore from '../../stores/filterStore';
 
 const FilterName = observer(() => {
-  const filterNameQuery = filterStore.filterNameQuery;
-
   const filterNameIconClass = classNames(
     'stream-interaction-icon',
     {
-      'stream-interaction-icon-active': filterNameQuery
+      'stream-interaction-icon-active': filterStore.query
     }
   );
 
   return (
     <div className="stream-interaction">
       <div className={filterNameIconClass} title={'Search Stream'}>
-        <ButtonInline onClick={() => filterStore.nameFilter('')}>
+        <ButtonInline onClick={() => filterStore.setFilterQuery('')}>
           <i className="fa fa-search" />
         </ButtonInline>
       </div>
       <div className="stream-interaction-content">
         <InputMenu
           placeholder="SEARCH..."
-          onChange={(event) => filterStore.nameFilter(event.target.value.toLowerCase())}
-          value={filterNameQuery}
+          onChange={(event) => filterStore.setFilterQuery(event.target.value.toLowerCase())}
+          value={filterStore.query}
         />
       </div>
     </div>
@@ -34,7 +32,7 @@ const FilterName = observer(() => {
 });
 
 FilterName.propTypes = {
-  filterNameQuery: React.PropTypes.string,
+  query: React.PropTypes.string,
   onNameFilter: React.PropTypes.func
 };
 

@@ -1,4 +1,4 @@
-import { FollowersList } from './index';
+import FollowersList from './index';
 import { shallow } from 'enzyme';
 
 describe('FollowersList', () => {

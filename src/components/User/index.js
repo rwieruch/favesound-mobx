@@ -1,16 +1,19 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
 import { UserPreview } from './preview';
-import sessionStore from '../../stores/sessionStore';
-import userStore from '../../stores/userStore';
 
-export default observer(() => {
+export default inject(
+  'userStore'
+)(observer(({
+  user,
+  userStore
+}) => {
   return (
     <UserPreview
       followings={userStore.followings}
-      user={sessionStore.user}
+      user={user}
       onFollow={actions.follow}
     />
   );
-});
+}));

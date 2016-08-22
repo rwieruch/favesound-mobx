@@ -28,7 +28,7 @@ class Browse extends React.Component {
   fetchActivitiesByGenre() {
     const { location, paginateStore } = this.props;
     const genre = location.query.genre || DEFAULT_GENRE;
-    const nextHref = paginateStore.links[genre];
+    const nextHref = paginateStore.getLinkByType(genre);
     actions.fetchActivitiesByGenre(nextHref, genre);
   }
 

@@ -47,17 +47,7 @@ function CommentExtension({
   );
 }
 
-CommentExtension.propTypes = {
-  onFetchComments: React.PropTypes.func,
-  activity: React.PropTypes.object,
-  commentIds: React.PropTypes.array,
-  commentEntities: React.PropTypes.object,
-  userEntities: React.PropTypes.object,
-  requestInProcess: React.PropTypes.bool,
-  nextHref: React.PropTypes.string,
-};
-
-export default inject(
+const CommentExtensionContainer = inject(
   'commentStore',
   'entityStore',
   'requestStore',
@@ -76,8 +66,18 @@ export default inject(
       commentEntities={entityStore.getEntitiesByKey('comments')}
       userEntities={entityStore.getEntitiesByKey('users')}
       requestInProcess={requestStore.getRequestByType(getCommentProperty(activity.id))}
-      nextHref={paginateStore.links[getCommentProperty(activity.id)]}
+      nextHref={paginateStore.getLinkByType(getCommentProperty(activity.id))}
       onFetchComments={actions.fetchComments}
     />
   );
 }));
+
+CommentExtensionContainer.wrappedComponent.propTypes = {
+  activity: React.PropTypes.object.isRequired,
+  commentStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
+};
+
+export default CommentExtensionContainer;

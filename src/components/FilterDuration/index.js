@@ -14,19 +14,17 @@ function hasActiveFilter(activeDurationFilter) {
 }
 
 const FilterDuration = observer(() => {
-  const activeDurationFilter = filterStore.activeDurationFilter;
-
   const filterDurationIconClass = classNames(
     'stream-interaction-icon',
     {
-      'stream-interaction-icon-active': hasActiveFilter(activeDurationFilter)
+      'stream-interaction-icon-active': hasActiveFilter(filterStore.durationFilterType)
     }
   );
 
   return (
     <div className="stream-interaction">
       <div className={filterDurationIconClass} title={'Filter Stream'}>
-        <ButtonInline onClick={() => filterStore.filterDuration(filterTypes.ALL)}>
+        <ButtonInline onClick={() => filterStore.setFilterDuration(filterTypes.ALL)}>
           <i className="fa fa-filter" />
         </ButtonInline>
       </div>
@@ -35,7 +33,7 @@ const FilterDuration = observer(() => {
           map((value, key) => {
             return (
               <span key={key}>
-                <ButtonActive onClick={() => filterStore.filterDuration(value)} isActive={value === activeDurationFilter}>
+                <ButtonActive onClick={() => filterStore.setFilterDuration(value)} isActive={value === filterStore.durationFilterType}>
                   {DURATION_FILTER_NAMES[value]}
                 </ButtonActive>
               </span>

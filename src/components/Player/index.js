@@ -15,8 +15,7 @@ class Player extends React.Component {
 
     if (!audioElement) { return; }
 
-    const { isPlaying } = this.props.playerStore;
-    if (isPlaying) {
+    if (this.props.playerStore.isPlaying) {
       audioElement.play();
     } else {
       audioElement.pause();
@@ -25,7 +24,6 @@ class Player extends React.Component {
 
   render() {
     const { sessionStore, entityStore, playerStore, toggleStore } = this.props;
-    const currentUser = sessionStore.user;
     const { activeTrackId, isPlaying, playlist } = playerStore;
     const userEntities = entityStore.getEntitiesByKey('users');
     const trackEntities = entityStore.getEntitiesByKey('tracks');
@@ -86,7 +84,7 @@ class Player extends React.Component {
           </div>
           <div className="player-content-action">
             {
-              currentUser ?
+              sessionStore.user ?
                 <ButtonInline onClick={() => actions.like(track)}>
                   <i className={likeClass} />
                 </ButtonInline> : null

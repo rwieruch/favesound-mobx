@@ -26,7 +26,7 @@ export function login() {
   SC.connect().then((session) => {
     Cookies.set(OAUTH_TOKEN, session.oauth_token);
 
-    sessionStore.sessionStore(session);
+    sessionStore.setSession(session);
     fetchUser();
   });
   /* eslint-enable no-undef */

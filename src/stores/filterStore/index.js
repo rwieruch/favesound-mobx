@@ -4,19 +4,19 @@ import * as filterTypes from '../../constants/filterTypes';
 class FilterStore {
 
   @observable durationFilterType;
-  @observable filterNameQuery;
+  @observable query;
 
   constructor() {
     this.durationFilterType = filterTypes.ALL;
-    this.filterNameQuery = '';
+    this.query = '';
   }
 
-  @action filterDuration = (filterType) => {
+  @action setFilterDuration = (filterType) => {
     this.durationFilterType = filterType;
   }
 
-  @action filterName = (filterName) => {
-    this.filterNameQuery = filterName;
+  @action setFilterQuery = (query) => {
+    this.query = query;
   }
 
 }

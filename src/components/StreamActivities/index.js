@@ -27,18 +27,18 @@ const StreamActivities = inject(
 }) => {
   const filters = [
     DURATION_FILTER_FUNCTIONS[filterStore.durationFilterType],
-    getTracknameFilter(filterStore.filterNameQuery)
+    getTracknameFilter(filterStore.query)
   ];
 
-  const nextHref = paginateStore.links[paginateLinkTypes.ACTIVITIES];
+  const nextHref = paginateStore.getLinkByType(paginateLinkTypes.ACTIVITIES);
 
   return (
     <div>
       <StreamInteractions />
       <Activities
         requestInProcess={requestStore.getRequestByType(requestTypes.ACTIVITIES)}
-        entities={entityStore.getEntitiesByKey('tracks')}
         ids={userStore.activities}
+        entities={entityStore.getEntitiesByKey('tracks')}
         activeFilter={getAndCombined(filters)}
         activeSort={SORT_FUNCTIONS[sortStore.sortType]}
         scrollFunction={() => actions.fetchActivities(null, nextHref)}

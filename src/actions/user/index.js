@@ -29,7 +29,7 @@ export function fetchFollowings(user, nextHref, ignoreInProgress) {
       const normalized = normalize(data.collection, arrayOf(userSchema));
       entityStore.mergeEntities('tracks', normalized.entities.tracks);
       entityStore.mergeEntities('users', normalized.entities.users);
-      userStore.followings.push(normalized.result);
+      userStore.mergeFollowings(normalized.result);
       paginateStore.setPaginateLink(paginateLinkTypes.FOLLOWINGS, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
@@ -62,7 +62,7 @@ export function fetchActivities(user, nextHref) {
       const normalized = normalize(activitiesMap, arrayOf(trackSchema));
       entityStore.mergeEntities('tracks', normalized.entities.tracks);
       entityStore.mergeEntities('users', normalized.entities.users);
-      userStore.activities.push(normalized.result);
+      userStore.mergeActivities(normalized.result);
 
       paginateStore.setPaginateLink(paginateLinkTypes.ACTIVITIES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
@@ -83,7 +83,7 @@ export function fetchFollowers(user, nextHref) {
       const normalized = normalize(data.collection, arrayOf(userSchema));
       entityStore.mergeEntities('tracks', normalized.entities.tracks);
       entityStore.mergeEntities('users', normalized.entities.users);
-      userStore.followers.push(normalized.result);
+      userStore.mergeFollowers(normalized.result);
       paginateStore.setPaginateLink(paginateLinkTypes.FOLLOWERS, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
@@ -103,7 +103,7 @@ export function fetchFavorites(user, nextHref) {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
       entityStore.mergeEntities('tracks', normalized.entities.tracks);
       entityStore.mergeEntities('users', normalized.entities.users);
-      userStore.favorites.push(normalized.result);
+      userStore.mergeFavorites(normalized.result);
       paginateStore.setPaginateLink(paginateLinkTypes.FAVORITES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
