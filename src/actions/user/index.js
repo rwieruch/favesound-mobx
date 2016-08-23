@@ -1,7 +1,6 @@
 import flow from 'lodash/fp/flow';
 import map from 'lodash/fp/map';
 import filter from 'lodash/fp/filter';
-import reduce from 'lodash/fp/reduce';
 import { arrayOf, normalize } from 'normalizr';
 import userSchema from '../../schemas/user';
 import trackSchema from '../../schemas/track';
@@ -51,8 +50,8 @@ export function fetchActivities(user, nextHref) {
         map(toIdAndType)
       )(data.collection);
 
-      userStore.typeTracks = mergeTrackTypes(userStore.typeTracks, filter((value) => value.type === trackTypes.TRACK, typeMap));
-      userStore.typeReposts = mergeTrackTypes(userStore.typeReposts, filter((value) => value.type === trackTypes.TRACK_REPOST, typeMap));
+      userStore.mergeTypeTracks(filter((v) => v.type === trackTypes.TRACK, typeMap));
+      userStore.mergeTypeReposts(filter((v) => v.type === trackTypes.TRACK_REPOST, typeMap));
 
       const activitiesMap = flow(
         filter(isTrack),
@@ -107,16 +106,4 @@ export function fetchFavorites(user, nextHref) {
       paginateStore.setPaginateLink(paginateLinkTypes.FAVORITES, data.next_href);
       requestStore.setRequestInProcess(requestType, false);
     });
-}
-
-function mergeTrackTypes(previousList, incomingList) {
-  const mergeTypes = reduce(countByType, previousList);
-  return mergeTypes(incomingList);
-}
-
-function countByType(result, value) {
-  /* eslint-disable no-param-reassign */
-  result[value.id] = result[value.id] ? result[value.id] + 1 : 1;
-  /* eslint-enable no-param-reassign */
-  return result;
 }

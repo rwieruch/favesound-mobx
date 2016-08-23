@@ -124,7 +124,7 @@ function List({
 }
 
 List.propTypes = {
-  ids: React.PropTypes.array,
+  ids: React.PropTypes.object,
   isExpanded: React.PropTypes.bool,
   title: React.PropTypes.string,
   kind: React.PropTypes.string,

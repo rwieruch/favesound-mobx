@@ -47,6 +47,26 @@ class UserStore {
     remove(this.favorites, (id) => trackId === id);
   }
 
+  @action mergeTypeTracks = (list) => {
+    forEach(list, (item) => {
+      if (this.typeTracks[item.id]) {
+        this.typeTracks[item.id]++;
+      } else {
+        this.typeTracks[item.id] = 1;
+      }
+    });
+  }
+
+  @action mergeTypeReposts = (list) => {
+    forEach(list, (item) => {
+      if (this.typeReposts[item.id]) {
+        this.typeReposts[item.id]++;
+      } else {
+        this.typeReposts[item.id] = 1;
+      }
+    });
+  }
+
   @action reset = () => {
     this.followings = [];
     this.activities = [];

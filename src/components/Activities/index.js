@@ -71,7 +71,7 @@ const Activities = observer(({
 
 Activities.propTypes = {
   requestInProcess: React.PropTypes.bool,
-  ids: React.PropTypes.array,
+  ids: React.PropTypes.object,
   entities: React.PropTypes.object,
   activeFilter: React.PropTypes.func,
   activeSort: React.PropTypes.func,

@@ -45,7 +45,7 @@ function UserPreview({ user, followings, onFollow }) {
 }
 
 UserPreview.propTypes = {
-  followings: React.PropTypes.array,
+  followings: React.PropTypes.object,
   user: React.PropTypes.object,
   onFollow: React.PropTypes.func
 };
