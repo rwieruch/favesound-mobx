@@ -158,6 +158,4 @@ TrackStream.propTypes = {
   onActivateTrack: React.PropTypes.func,
 };
 
-export {
-  TrackStream
-};
+export default TrackStream;

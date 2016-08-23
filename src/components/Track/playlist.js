@@ -53,6 +53,4 @@ TrackPlaylist.propTypes = {
   onRemoveTrackFromPlaylist: React.PropTypes.func
 };
 
-export {
-  TrackPlaylist
-};
+export default TrackPlaylist;

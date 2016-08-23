@@ -6,7 +6,7 @@ import * as actions from '../../actions/index';
 import FetchOnScroll from '../../components/FetchOnScroll';
 import TrackExtension from '../../components/TrackExtension';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { TrackStream } from '../../components/Track/stream';
+import TrackStream from '../../components/Track/stream';
 
 const Activity = inject(
   'userStore',

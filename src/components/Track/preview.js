@@ -68,6 +68,4 @@ TrackPreview.propTypes = {
   onAddTrackToPlaylist: React.PropTypes.func
 };
 
-export {
-  TrackPreview
-};
+export default TrackPreview;

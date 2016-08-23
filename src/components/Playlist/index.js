@@ -4,7 +4,7 @@ import map from '../../services/map';
 import classNames from 'classnames';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
-import { TrackPlaylist } from '../../components/Track/playlist';
+import TrackPlaylist from '../../components/Track/playlist';
 import ButtonInline from '../../components/ButtonInline';
 
 const PlaylistItem = inject(

@@ -1,7 +1,9 @@
 import React from 'react';
 import map from '../../services/map';
+import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
-import { TrackPreviewContainer } from '../../components/Track';
+import * as actions from '../../actions/index';
+import TrackPreview from '../../components/Track/preview';
 import UserPreview from '../../components/User';
 import ButtonMore from '../../components/ButtonMore';
 import ButtonInline from '../../components/ButtonInline';
@@ -17,6 +19,26 @@ export function Chevron({ ids, isExpanded }) {
 
   return ids.length > 4 ? <i className={chevronClass} /> : null;
 }
+
+const TrackPreviewContainer = inject(
+  'entityStore',
+  'playerStore'
+)(observer(({
+  activity,
+  entityStore,
+  playerStore
+}) => {
+  return (
+    <TrackPreview
+      activity={activity}
+      isPlaying={playerStore.isPlaying}
+      activeTrackId={playerStore.activeTrackId}
+      userEntities={entityStore.getEntitiesByKey('users')}
+      onActivateTrack={actions.activateTrack}
+      onAddTrackToPlaylist={actions.addTrackToPlaylist}
+    />
+  );
+}));
 
 function SpecificItemTrack({ entities, trackId }) {
   return (
