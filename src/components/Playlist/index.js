@@ -29,7 +29,9 @@ const PlaylistItem = inject(
   );
 }));
 
-function PlaylistMenu({ onClearPlaylist }) {
+const PlaylistMenu = observer(({
+  onClearPlaylist
+}) => {
   return (
     <div className="playlist-menu">
       <div>Player Queue</div>
@@ -40,13 +42,13 @@ function PlaylistMenu({ onClearPlaylist }) {
       </div>
     </div>
   );
-}
+});
 
-function Playlist({
+const Playlist = observer(({
   playlistToggle,
   playlist,
   trackEntities
-}) {
+}) => {
   const playlistClass = classNames(
     'playlist',
     {
@@ -64,7 +66,7 @@ function Playlist({
       </ul>
     </div>
   );
-}
+});
 
 const PlaylistContainer = inject(
   'toggleStore',
