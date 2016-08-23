@@ -35,7 +35,8 @@ class Browse extends React.Component {
   needToFetchActivities() {
     const { location, browseStore } = this.props;
     const genre = location.query.genre || DEFAULT_GENRE;
-    return browseStore.getByGenre(genre).length < 20;
+    const activitiesByGenre = browseStore.getByGenre(genre);
+    return (activitiesByGenre ? activitiesByGenre.toJS() : []).length < 20;
   }
 
   render() {

@@ -18,8 +18,7 @@ class BrowseStore {
   }
 
   getByGenre(genre) {
-    const byGenre = this.activitiesByGenre.get(genre);
-    return byGenre ? byGenre.toJS() : [];
+    return this.activitiesByGenre.get(genre);
   }
 
 }
