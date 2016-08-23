@@ -1,11 +1,16 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import find from 'lodash/fp/find';
 import InfoList from '../../components/InfoList';
 import Actions from '../../components/HoverActions';
 import Artwork from '../../components/Artwork';
 import Permalink from '../../components/Permalink';
 
-function UserPreview({ user, followings, onFollow }) {
+const UserPreview = observer(({
+  user,
+  followings,
+  onFollow
+}) => {
   const { followings_count, followers_count, track_count, avatar_url, username, permalink_url } = user;
 
   const configuration = [
@@ -42,7 +47,7 @@ function UserPreview({ user, followings, onFollow }) {
       </div>
     </div>
   );
-}
+});
 
 UserPreview.propTypes = {
   followings: React.PropTypes.object,
