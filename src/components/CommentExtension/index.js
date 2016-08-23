@@ -3,8 +3,8 @@ import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import * as actions from '../../actions/index';
 import { getCommentProperty } from '../../services/string';
-import { ButtonMore } from '../../components/ButtonMore';
-import { Artwork } from '../../components/Artwork';
+import ButtonMore from '../../components/ButtonMore';
+import Artwork from '../../components/Artwork';
 import { fromNow } from '../../services/track';
 
 function CommentExtension({

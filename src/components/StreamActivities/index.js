@@ -5,7 +5,7 @@ import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { getAndCombined } from '../../services/filter';
 import Activities from '../../components/Activities';
-import { StreamInteractions } from '../../components/StreamInteractions';
+import StreamInteractions from '../../components/StreamInteractions';
 import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import { getTracknameFilter } from '../../constants/nameFilter';
 import { SORT_FUNCTIONS } from '../../constants/sort';
@@ -47,7 +47,7 @@ const StreamActivities = inject(
   );
 }));
 
-StreamActivities.propTypes = {
+StreamActivities.wrappedComponent.propTypes = {
   userStore: React.PropTypes.object,
   entityStore: React.PropTypes.object,
   playerStore: React.PropTypes.object,

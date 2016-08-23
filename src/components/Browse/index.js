@@ -59,12 +59,10 @@ class Browse extends React.Component {
 }
 
 Browse.wrappedComponent.propTypes = {
-  genre: React.PropTypes.string,
-  browseActivities: React.PropTypes.object,
-  requestsInProcess: React.PropTypes.object,
-  paginateLinks: React.PropTypes.object,
-  trackEntities: React.PropTypes.object,
-  fetchActivitiesByGenre: React.PropTypes.func
+  browseStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
 };
 
 export default Browse;

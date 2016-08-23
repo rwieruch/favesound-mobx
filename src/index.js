@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import { Dashboard } from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import Browse from './components/Browse';
 import Callback from './components/Callback';
 import App from './components/App';

@@ -4,9 +4,35 @@ import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
-import { List } from '../../components/List';
+import List from '../../components/List';
 
-const FollowingsList = inject(
+function FollowingsList({
+  userEntities,
+  nextHref,
+  requestInProcess,
+  isExpanded,
+  favorites,
+  currentUser,
+  onSetToggle,
+  onFetchFollowings
+}) {
+  return (
+    <List
+      title="Followings"
+      ids={favorites}
+      entities={userEntities}
+      nextHref={nextHref}
+      requestInProcess={requestInProcess}
+      isExpanded={isExpanded}
+      currentUser={currentUser}
+      onToggleMore={() => onSetToggle(toggleTypes.FOLLOWINGS)}
+      onFetchMore={() => onFetchFollowings(currentUser, nextHref)}
+      kind="USER"
+    />
+  );
+}
+
+const FollowingsListContainer = inject(
   'sessionStore',
   'userStore',
   'entityStore',
@@ -21,36 +47,27 @@ const FollowingsList = inject(
   requestStore,
   toggleStore
 }) => {
-  const userEntities = entityStore.getEntitiesByKey('users');
-  const nextHref = paginateStore.getLinkByType(paginateLinkTypes.FOLLOWINGS);
-  const requestInProcess = requestStore.getRequestByType(requestTypes.FOLLOWINGS);
-  const isExpanded = toggleStore.toggles.get(toggleTypes.FOLLOWINGS);
-
   return (
-    <List
-      title="Followings"
-      ids={userStore.followings}
-      entities={userEntities}
-      nextHref={nextHref}
-      requestInProcess={requestInProcess}
-      isExpanded={isExpanded}
+    <FollowingsList
+      userEntities={entityStore.getEntitiesByKey('users')}
+      nextHref={paginateStore.getLinkByType(paginateLinkTypes.FOLLOWINGS)}
+      requestInProcess={requestStore.getRequestByType(requestTypes.FOLLOWINGS)}
+      isExpanded={toggleStore.toggles.get(toggleTypes.FOLLOWINGS)}
+      favorites={userStore.followings}
       currentUser={sessionStore.user}
-      onToggleMore={() => toggleStore.setToggle(toggleTypes.FOLLOWINGS)}
-      onFetchMore={() => actions.fetchFollowings(sessionStore.user, nextHref)}
-      kind="USER"
+      onFetchFollowings={actions.fetchFollowings}
+      onSetToggle={toggleStore.setToggle}
     />
   );
 }));
 
-FollowingsList.propTypes = {
-  currentUser: React.PropTypes.object,
-  userEntities: React.PropTypes.object,
-  followings: React.PropTypes.array,
-  requestsInProcess: React.PropTypes.object,
-  paginateLinks: React.PropTypes.object,
-  toggle: React.PropTypes.object,
-  onSetToggle: React.PropTypes.func,
-  onFetchFollowings: React.PropTypes.func
+FollowingsListContainer.wrappedComponent.propTypes = {
+  sessionStore: React.PropTypes.object.isRequired,
+  userStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
+  toggleStore: React.PropTypes.object.isRequired
 };
 
-export default FollowingsList;
+export default FollowingsListContainer;

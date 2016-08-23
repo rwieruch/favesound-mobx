@@ -91,7 +91,7 @@ const Header = inject(
   );
 }));
 
-Header.propTypes = {
+Header.wrappedComponent.propTypes = {
   sessionStore: React.PropTypes.object,
   genre: React.PropTypes.string,
   pathname: React.PropTypes.string,

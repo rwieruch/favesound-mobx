@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import map from '../../services/map';
 
-function InfoItem({ infoItem }) {
+export function InfoItem({ infoItem }) {
   const infoItemClass = classNames(
     'info-list-item',
     {
@@ -31,8 +31,4 @@ InfoList.propTypes = {
   information: React.PropTypes.array
 };
 
-export {
-  InfoList,
-
-  InfoItem
-};
+export default InfoList;

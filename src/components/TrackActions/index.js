@@ -1,7 +1,6 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
-import { ButtonGhost } from '../../components/ButtonGhost';
+import ButtonGhost from '../../components/ButtonGhost';
 
 function TrackActions({ onOpenComments, onAddTrackToPlaylist }) {
   const isSmall = true;
@@ -26,7 +25,7 @@ TrackActions.propTypes = {
   onAddTrackToPlaylist: React.PropTypes.func,
 };
 
-export default observer(({ activity }) => {
+function TrackActionsContainer({ activity }) {
   return (
     <TrackActions
       activity={activity}
@@ -34,4 +33,6 @@ export default observer(({ activity }) => {
       onAddTrackToPlaylist={() => actions.addTrackToPlaylist(activity)}
     />
   );
-});
+}
+
+export default TrackActionsContainer;

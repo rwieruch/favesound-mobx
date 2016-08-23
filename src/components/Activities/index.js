@@ -5,12 +5,8 @@ import filter from 'lodash/fp/filter';
 import * as actions from '../../actions/index';
 import FetchOnScroll from '../../components/FetchOnScroll';
 import TrackExtension from '../../components/TrackExtension';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { TrackStream } from '../../components/Track/stream';
-
-function getMatchedEntities(ids, entities) {
-  return map((id) => entities[id], ids);
-}
 
 const Activity = inject(
   'userStore',
@@ -54,7 +50,7 @@ const Activities = observer(({
   activeFilter,
   activeSort,
 }) => {
-  const matchedEntities = getMatchedEntities(ids, entities);
+  const matchedEntities = map((id) => entities[id], ids);
   const filteredEntities = filter(activeFilter, matchedEntities);
   const sortedEntities = activeSort(filteredEntities);
 

@@ -1,4 +1,4 @@
-import { ButtonMore } from './index';
+import ButtonMore from './index';
 import { shallow } from 'enzyme';
 
 describe('ButtonMore', () => {

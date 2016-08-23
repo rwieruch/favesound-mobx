@@ -16,6 +16,9 @@ function ButtonGhost({ onClick, isSmall, children }) {
   );
 }
 
-export {
-  ButtonGhost
+ButtonGhost.propTypes = {
+  isSmall: React.PropTypes.bool,
+  onClick: React.PropTypes.func,
 };
+
+export default ButtonGhost;

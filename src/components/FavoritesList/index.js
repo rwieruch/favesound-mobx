@@ -4,9 +4,35 @@ import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
-import { List } from '../../components/List';
+import List from '../../components/List';
 
-const FavoritesList = inject(
+function FavoritesList({
+  trackEntities,
+  nextHref,
+  requestInProcess,
+  isExpanded,
+  favorites,
+  currentUser,
+  onSetToggle,
+  onFetchFavorites
+}) {
+  return (
+    <List
+      title="Favorites"
+      ids={favorites}
+      entities={trackEntities}
+      nextHref={nextHref}
+      requestInProcess={requestInProcess}
+      isExpanded={isExpanded}
+      currentUser={currentUser}
+      onToggleMore={() => onSetToggle(toggleTypes.FAVORITES)}
+      onFetchMore={() => onFetchFavorites(currentUser, nextHref)}
+      kind="TRACK"
+    />
+  );
+}
+
+const FavoritesListContainer = inject(
   'sessionStore',
   'userStore',
   'entityStore',
@@ -21,36 +47,27 @@ const FavoritesList = inject(
   requestStore,
   toggleStore
 }) => {
-  const trackEntities = entityStore.getEntitiesByKey('tracks');
-  const nextHref = paginateStore.getLinkByType(paginateLinkTypes.FAVORITES);
-  const requestInProcess = requestStore.getRequestByType(requestTypes.FAVORITES);
-  const isExpanded = toggleStore.toggles.get(toggleTypes.FAVORITES);
-
   return (
-    <List
-      title="Favorites"
-      ids={userStore.favorites}
-      entities={trackEntities}
-      nextHref={nextHref}
-      requestInProcess={requestInProcess}
-      isExpanded={isExpanded}
+    <FavoritesList
+      trackEntities={entityStore.getEntitiesByKey('tracks')}
+      nextHref={paginateStore.getLinkByType(paginateLinkTypes.FAVORITES)}
+      requestInProcess={requestStore.getRequestByType(requestTypes.FAVORITES)}
+      isExpanded={toggleStore.toggles.get(toggleTypes.FAVORITES)}
+      favorites={userStore.favorites}
       currentUser={sessionStore.user}
-      onToggleMore={() => toggleStore.setToggle(toggleTypes.FAVORITES)}
-      onFetchMore={() => actions.fetchFavorites(sessionStore.user, nextHref)}
-      kind="TRACK"
+      onFetchFavorites={actions.fetchFavorites}
+      onSetToggle={toggleStore.setToggle}
     />
   );
 }));
 
-FavoritesList.propTypes = {
-  currentUser: React.PropTypes.object,
-  trackEntities: React.PropTypes.object,
-  favorites: React.PropTypes.array,
-  requestsInProcess: React.PropTypes.object,
-  paginateLinks: React.PropTypes.object,
-  toggle: React.PropTypes.object,
-  onSetToggle: React.PropTypes.func,
-  onFetchFavorites: React.PropTypes.func
+FavoritesListContainer.wrappedComponent.propTypes = {
+  sessionStore: React.PropTypes.object.isRequired,
+  userStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
+  toggleStore: React.PropTypes.object.isRequired
 };
 
-export default FavoritesList;
+export default FavoritesListContainer;

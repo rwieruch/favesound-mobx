@@ -9,7 +9,7 @@ function TrackExtension({ activity, isOpenComment }) {
     return <CommentExtension activity={activity} />;
   }
 
-  return <noscript />;
+  return null;
 }
 
 TrackExtension.propTypes = {
@@ -17,7 +17,7 @@ TrackExtension.propTypes = {
   openComments: React.PropTypes.func,
 };
 
-export default observer(({ activity }) => {
+const TrackExtensionContainer = observer(({ activity }) => {
   return (
     <TrackExtension
       activity={activity}
@@ -26,3 +26,9 @@ export default observer(({ activity }) => {
     />
   );
 });
+
+TrackExtensionContainer.propTypes = {
+  activity: React.PropTypes.object,
+};
+
+export default TrackExtensionContainer;

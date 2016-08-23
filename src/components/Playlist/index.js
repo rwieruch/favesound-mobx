@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { TrackPlaylist } from '../../components/Track/playlist';
-import { ButtonInline } from '../../components/ButtonInline';
+import ButtonInline from '../../components/ButtonInline';
 
 const PlaylistItem = inject(
   'entityStore',
@@ -29,9 +29,7 @@ const PlaylistItem = inject(
   );
 }));
 
-const PlaylistMenu = observer(({
-  onClearPlaylist
-}) => {
+function PlaylistMenu({ onClearPlaylist }) {
   return (
     <div className="playlist-menu">
       <div>Player Queue</div>
@@ -42,21 +40,13 @@ const PlaylistMenu = observer(({
       </div>
     </div>
   );
-});
+}
 
-const Playlist = inject(
-  'entityStore',
-  'playerStore',
-  'toggleStore'
-)(observer(({
-  entityStore,
-  playerStore,
-  toggleStore
-}) => {
-  const playlistToggle = toggleStore.toggles.get(toggleTypes.PLAYLIST);
-  const playlist = playerStore.playlist;
-  const trackEntities = entityStore.getEntitiesByKey('tracks');
-
+function Playlist({
+  playlistToggle,
+  playlist,
+  trackEntities
+}) {
   const playlistClass = classNames(
     'playlist',
     {
@@ -74,12 +64,30 @@ const Playlist = inject(
       </ul>
     </div>
   );
+}
+
+const PlaylistContainer = inject(
+  'toggleStore',
+  'playerStore',
+  'entityStore'
+)(observer(({
+  toggleStore,
+  playerStore,
+  entityStore
+}) => {
+  return (
+    <Playlist
+      playlistToggle={toggleStore.toggles.get(toggleTypes.PLAYLIST)}
+      playlist={playerStore.playlist}
+      trackEntities={entityStore.getEntitiesByKey('tracks')}
+    />
+  );
 }));
 
-Playlist.wrappedComponent.propTypes = {
+PlaylistContainer.wrappedComponent.propTypes = {
   entityStore: React.PropTypes.object,
   playerStore: React.PropTypes.object,
   toggleStore: React.PropTypes.object,
 };
 
-export default Playlist;
+export default PlaylistContainer;

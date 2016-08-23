@@ -3,10 +3,10 @@ import map from '../../services/map';
 import classNames from 'classnames';
 import { TrackPreviewContainer } from '../../components/Track';
 import UserPreview from '../../components/User';
-import { ButtonMore } from '../../components/ButtonMore';
-import { ButtonInline } from '../../components/ButtonInline';
+import ButtonMore from '../../components/ButtonMore';
+import ButtonInline from '../../components/ButtonInline';
 
-function Chevron({ ids, isExpanded }) {
+export function Chevron({ ids, isExpanded }) {
   const chevronClass = classNames(
     'fa',
     {
@@ -34,7 +34,7 @@ function SpecificItemUser({ entities, userId }) {
   );
 }
 
-function SpecificList({ ids, kind, entities }) {
+export function SpecificList({ ids, kind, entities }) {
   if (kind === 'USER') {
     return (
       <div className="list-content">
@@ -113,9 +113,4 @@ List.propTypes = {
   onFetchMore: React.PropTypes.func
 };
 
-export {
-  List,
-
-  SpecificList,
-  Chevron,
-};
+export default List;

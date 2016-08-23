@@ -1,6 +1,6 @@
 import React from 'react';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { ButtonGhost } from '../../components/ButtonGhost';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ButtonGhost from '../../components/ButtonGhost';
 
 function ButtonMore({ onClick, requestInProcess, nextHref, isHidden }) {
   return (
@@ -15,6 +15,11 @@ function ButtonMore({ onClick, requestInProcess, nextHref, isHidden }) {
   );
 }
 
-export {
-  ButtonMore
+ButtonMore.propTypes = {
+  nextHref: React.PropTypes.string,
+  requestInProcess: React.PropTypes.bool,
+  isHidden: React.PropTypes.bool,
+  onClick: React.PropTypes.func,
 };
+
+export default ButtonMore;

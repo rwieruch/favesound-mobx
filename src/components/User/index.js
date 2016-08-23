@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
-import { UserPreview } from './preview';
+import UserPreview from './preview';
 
-export default inject(
+const UserPreviewContainer = inject(
   'userStore'
 )(observer(({
   user,
@@ -17,3 +17,10 @@ export default inject(
     />
   );
 }));
+
+UserPreviewContainer.wrappedComponent.propTypes = {
+  user: React.PropTypes.object,
+  userStore: React.PropTypes.object,
+};
+
+export default UserPreviewContainer;

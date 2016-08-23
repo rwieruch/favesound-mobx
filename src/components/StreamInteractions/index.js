@@ -19,6 +19,4 @@ function StreamInteractions() {
   );
 }
 
-export {
-  StreamInteractions,
-};
+export default StreamInteractions;

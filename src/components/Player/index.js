@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { addAccessTokenWith } from '../../services/api';
-import { ButtonInline } from '../../components/ButtonInline';
+import ButtonInline from '../../components/ButtonInline';
 
 @inject('sessionStore', 'entityStore', 'playerStore', 'toggleStore') @observer
 class Player extends React.Component {
