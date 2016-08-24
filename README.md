@@ -15,7 +15,7 @@ Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Tw
 ## Run
 
 1. Clone Repository: `git clone git@github.com:rwieruch/favesound-mobx.git`
-2. Exchange CLIENT_ID in `../src/constants/authentification.js` with your own from [SoundCloud for Developers](https://developers.soundcloud.com/) and use http://localhost:8080/callback as Redirect URI for your Soundcloud App
+2. Exchange CLIENT_ID in `../src/constants/authentification.js` with your own from [SoundCloud for Developers](https://developers.soundcloud.com/) and use `http://localhost:8080/callback` as `Redirect_URI` for your Soundcloud App
 3. npm install
 4. npm start
 5. npm test
