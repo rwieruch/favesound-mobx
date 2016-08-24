@@ -2,6 +2,8 @@
 
 The SoundCloud Client in React + MobX made with passion!
 
+Features: Login to SoundCloud, show your Stream, Favorite Tracks, Followings and Followers. Follow people & like tracks. Put your tracks on a playlist, sort your stream by plays and likes and search for specific track names.
+
 ![FaveSound](https://s31.postimg.org/bz6rw0kez/Screen_Shot_2016_07_08_at_18_15_17.png)
 
 Original Live Version in Redux: http://www.favesound.de/
@@ -22,5 +24,5 @@ Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Tw
 
 ## Contribute
 
-I am looking actively for contributors to make this project awesome! It doesn't matter if you are new to open source, I would welcome it!
+I am looking for contributors to make this project awesome! It doesn't matter if you are new to open source, I would welcome it!
 
