@@ -4,13 +4,13 @@ The SoundCloud Client in React + MobX made with passion!
 
 ![FaveSound](https://s31.postimg.org/bz6rw0kez/Screen_Shot_2016_07_08_at_18_15_17.png)
 
-Live: http://www.favesound.de/
+Original Live Version in Redux: http://www.favesound.de/
 
-[Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud)
+[React + MobX + SoundCloud Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud)
 
 Uses mobx, mobx-react, normalizr, react, lodash-fp, airbnb-extended eslint, enzyme and the Soundcloud API.
 
-Feedback is more than appreciated via GitHub or [Twitter](https://twitter.com/rwieruch) :)
+Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Twitter](https://twitter.com/rwieruch) or my [Blog](http://www.robinwieruch.de/).
 
 ## Run
 
