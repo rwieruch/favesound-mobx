@@ -2,15 +2,28 @@
 
 The SoundCloud Client in React + MobX made with passion!
 
-Features: Login to SoundCloud, show your Stream, Favorite Tracks, Followings and Followers. Follow people & like tracks. Put your tracks on a playlist, sort your stream by plays and likes and search for specific track names.
+Uses mobx, mobx-react, normalizr, react, lodash-fp, airbnb-extended eslint, enzyme and the Soundcloud API.
 
 ![FaveSound](https://s31.postimg.org/bz6rw0kez/Screen_Shot_2016_07_08_at_18_15_17.png)
 
-Original Live Version in Redux: http://www.favesound.de/
+Features:
+* login to SoundCloud
+* show your personal stream
+* show favorite tracks, followers and followings
+* inifite scroll + paginated fetching
+* follow people
+* like tracks
+* player play/stop/forward/backward track
+* playlist
+* sort tracks by plays, likes, comments, reposts, downloads
+* filter tracks by duration
+* search tracks by name and artist
 
-[React + MobX + SoundCloud Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud)
+Refactored from original version in Redux: 
+* [Live](http://www.favesound.de/)
+* [Repository](https://github.com/rwieruch/favesound-redux)
 
-Uses mobx, mobx-react, normalizr, react, lodash-fp, airbnb-extended eslint, enzyme and the Soundcloud API.
+Create your own SoundCloud application with [React + MobX + SoundCloud Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud) + [Tutorial 1: The SoundCloud Client in React + Redux](http://www.robinwieruch.de/the-soundcloud-client-in-react-redux/) + [Tutorial 2: Refactoring to MobX](http://www.robinwieruch.de/mobx-react/).
 
 Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Twitter](https://twitter.com/rwieruch) or my [Blog](http://www.robinwieruch.de/).
 
