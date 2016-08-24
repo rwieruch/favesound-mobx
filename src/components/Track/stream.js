@@ -90,11 +90,13 @@ const TrackStream = observer(({
     },
     {
       className: 'fa fa-comment',
-      count: comment_count
+      count: comment_count,
+      activeSort: activeSortType === sortTypes.SORT_COMMENTS
     },
     {
       className: 'fa fa-download',
-      count: download_count
+      count: download_count,
+      activeSort: activeSortType === sortTypes.SORT_DOWNLOADS
     }
   ];
 
