@@ -1,5 +1,8 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import * as filterTypes from '../../constants/filterTypes';
+import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
+import { getTracknameFilter } from '../../constants/nameFilter';
+import { getAndCombined } from '../../services/filter';
 
 class FilterStore {
 
@@ -17,6 +20,13 @@ class FilterStore {
 
   @action setFilterQuery = (query) => {
     this.query = query;
+  }
+
+  @computed get combinedFilters() {
+    return getAndCombined([
+      DURATION_FILTER_FUNCTIONS[this.durationFilterType],
+      getTracknameFilter(this.query)
+    ]);
   }
 
 }

@@ -1,5 +1,6 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import * as sortTypes from '../../constants/sortTypes';
+import { SORT_FUNCTIONS } from '../../constants/sort';
 
 class SortStore {
 
@@ -11,6 +12,10 @@ class SortStore {
 
   @action setSortType = (sortType) => {
     this.sortType = sortType;
+  }
+
+  @computed get sortFn() {
+    return SORT_FUNCTIONS[this.sortType];
   }
 
 }

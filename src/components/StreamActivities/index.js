@@ -5,10 +5,6 @@ import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import Activities from '../../components/Activities';
 import StreamInteractions from '../../components/StreamInteractions';
-import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
-import { SORT_FUNCTIONS } from '../../constants/sort';
-import { getTracknameFilter } from '../../constants/nameFilter';
-import { getAndCombined } from '../../services/filter';
 
 const StreamActivities = inject(
   'userStore',
@@ -25,11 +21,6 @@ const StreamActivities = inject(
   sortStore,
   filterStore
 }) => {
-  const filters = [
-    DURATION_FILTER_FUNCTIONS[filterStore.durationFilterType],
-    getTracknameFilter(filterStore.query)
-  ];
-
   const nextHref = paginateStore.getLinkByType(paginateLinkTypes.ACTIVITIES);
 
   return (
@@ -39,8 +30,8 @@ const StreamActivities = inject(
         requestInProcess={requestStore.getRequestByType(requestTypes.ACTIVITIES)}
         ids={userStore.activities}
         entities={entityStore.getEntitiesByKey('tracks')}
-        activeFilter={getAndCombined(filters)}
-        activeSort={SORT_FUNCTIONS[sortStore.sortType]}
+        activeFilter={filterStore.combinedFilters}
+        activeSort={sortStore.sortFn}
         scrollFunction={() => actions.fetchActivities(null, nextHref)}
       />
     </div>

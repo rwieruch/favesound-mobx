@@ -5,10 +5,6 @@ import * as actions from '../../actions/index';
 import * as requestTypes from '../../constants/requestTypes';
 import Activities from '../../components/Activities';
 import StreamInteractions from '../../components/StreamInteractions';
-import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
-import { SORT_FUNCTIONS } from '../../constants/sort';
-import { getTracknameFilter } from '../../constants/nameFilter';
-import { getAndCombined } from '../../services/filter';
 
 @inject('browseStore', 'entityStore', 'paginateStore', 'requestStore', 'filterStore', 'sortStore') @observer
 class Browse extends React.Component {
@@ -45,10 +41,6 @@ class Browse extends React.Component {
   render() {
     const { browseStore, entityStore, requestStore, filterStore, location, sortStore } = this.props;
     const genre = location.query.genre || DEFAULT_GENRE;
-    const filters = [
-      DURATION_FILTER_FUNCTIONS[filterStore.durationFilterType],
-      getTracknameFilter(filterStore.query)
-    ];
 
     return (
       <div className="browse">
@@ -57,8 +49,8 @@ class Browse extends React.Component {
           requestInProcess={requestStore.getRequestByType(requestTypes.GENRES)}
           ids={browseStore.getByGenre(genre)}
           entities={entityStore.getEntitiesByKey('tracks')}
-          activeFilter={getAndCombined(filters)}
-          activeSort={SORT_FUNCTIONS[sortStore.sortType]}
+          activeFilter={filterStore.combinedFilters}
+          activeSort={sortStore.sortFn}
           scrollFunction={this.fetchActivitiesByGenre}
         />
       </div>

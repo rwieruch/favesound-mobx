@@ -5,18 +5,18 @@ class UserStore {
 
   @observable followings;
   @observable activities;
-  @observable typeReposts;
-  @observable typeTracks;
   @observable followers;
   @observable favorites;
+  @observable typeReposts;
+  @observable typeTracks;
 
   constructor() {
     this.followings = [];
     this.activities = [];
-    this.typeReposts = {};
-    this.typeTracks = {};
     this.followers = [];
     this.favorites = [];
+    this.typeReposts = {};
+    this.typeTracks = {};
   }
 
   @action mergeActivities = (ids) => {
@@ -28,7 +28,7 @@ class UserStore {
   }
 
   isFollowing(userId) {
-    return find(this.followings, (id) => userId === id);
+    return !!find(this.followings, (id) => userId === id);
   }
 
   @action mergeFollowers = (ids) => {

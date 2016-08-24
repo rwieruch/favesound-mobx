@@ -13,10 +13,6 @@ class PlayerStore {
     this.playlist = [];
   }
 
-  @action emptyPlaylist = () => {
-    this.playlist = [];
-  }
-
   @action removeFromPlaylist = (id) => {
     remove(this.playlist, (trackId) => trackId === id);
   }
@@ -35,6 +31,10 @@ class PlayerStore {
 
   @action setIsPlaying = (isPlaying) => {
     this.isPlaying = isPlaying;
+  }
+
+  @action emptyPlaylist = () => {
+    this.playlist = [];
   }
 
 }
