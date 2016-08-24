@@ -1,4 +1,4 @@
-import FollowersList from './index';
+import { FollowersList } from './index';
 import { shallow } from 'enzyme';
 
 describe('FollowersList', () => {
@@ -10,8 +10,8 @@ describe('FollowersList', () => {
     nextHref: '/foo',
     requestInProcess: false,
     isExpanded: false,
-    setToggle: () => {},
-    fetchFollowers: () => {}
+    onSetToggle: () => {},
+    onFetchFollowers: () => {}
   };
 
   it('renders', () => {

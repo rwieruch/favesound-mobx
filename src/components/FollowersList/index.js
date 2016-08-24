@@ -6,7 +6,7 @@ import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import List from '../../components/List';
 
-function FollowersList({
+export function FollowersList({
   userEntities,
   nextHref,
   requestInProcess,

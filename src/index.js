@@ -11,31 +11,7 @@ import Browse from './components/Browse';
 import Callback from './components/Callback';
 import App from './components/App';
 import { browse, dashboard, callback } from './constants/pathnames';
-import browseStore from './stores/browseStore';
-import commentStore from './stores/commentStore';
-import filterStore from './stores/filterStore';
-import sortStore from './stores/sortStore';
-import toggleStore from './stores/toggleStore';
-import playerStore from './stores/playerStore';
-import sessionStore from './stores/sessionStore';
-import entityStore from './stores/entityStore';
-import userStore from './stores/userStore';
-import paginateStore from './stores/paginateStore';
-import requestStore from './stores/requestStore';
-
-const stores = {
-  browseStore,
-  commentStore,
-  filterStore,
-  sortStore,
-  toggleStore,
-  playerStore,
-  sessionStore,
-  entityStore,
-  userStore,
-  paginateStore,
-  requestStore,
-};
+import * as stores from './stores';
 
 useStrict(true);
 

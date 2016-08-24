@@ -1,4 +1,4 @@
-import FavoritesList from './index';
+import { FavoritesList } from './index';
 import { shallow } from 'enzyme';
 
 describe('FavoritesList', () => {
@@ -10,8 +10,8 @@ describe('FavoritesList', () => {
     nextHref: '/foo',
     requestInProcess: false,
     isExpanded: false,
-    setToggle: () => {},
-    fetchFavorites: () => {}
+    onSetToggle: () => {},
+    onFetchFavorites: () => {}
   };
 
   it('renders', () => {
