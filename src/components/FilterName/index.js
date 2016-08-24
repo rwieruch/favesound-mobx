@@ -1,60 +1,53 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions/index';
-import { ButtonInline } from '../../components/ButtonInline';
-import { InputMenu } from '../../components/InputMenu';
+import ButtonInline from '../../components/ButtonInline';
+import InputMenu from '../../components/InputMenu';
 
 function FilterName({
-  filterNameQuery,
-  onNameFilter,
+  query,
+  onSetFilterQuery
 }) {
   const filterNameIconClass = classNames(
     'stream-interaction-icon',
     {
-      'stream-interaction-icon-active': filterNameQuery
+      'stream-interaction-icon-active': query
     }
   );
 
   return (
     <div className="stream-interaction">
       <div className={filterNameIconClass} title={'Search Stream'}>
-        <ButtonInline onClick={() => onNameFilter('')}>
+        <ButtonInline onClick={() => onSetFilterQuery('')}>
           <i className="fa fa-search" />
         </ButtonInline>
       </div>
       <div className="stream-interaction-content">
         <InputMenu
           placeholder="SEARCH..."
-          onChange={(event) => onNameFilter(event.target.value.toLowerCase())}
-          value={filterNameQuery}
+          onChange={(event) => onSetFilterQuery(event.target.value.toLowerCase())}
+          value={query}
         />
       </div>
     </div>
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    filterNameQuery: state.filter.filterNameQuery
-  };
-}
+const FilterNameContainer = inject(
+  'filterStore'
+)(observer(({
+  filterStore
+}) => {
+  return (
+    <FilterName
+      query={filterStore.query}
+      onSetFilterQuery={filterStore.setFilterQuery}
+    />
+  );
+}));
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onNameFilter: bindActionCreators(actions.filterName, dispatch)
-  };
-}
-
-FilterName.propTypes = {
-  filterNameQuery: React.PropTypes.string,
-  onNameFilter: React.PropTypes.func
+FilterNameContainer.wrappedComponent.propTypes = {
+  filterStore: React.PropTypes.object.isRequired
 };
 
-const FilterNameContainer = connect(mapStateToProps, mapDispatchToProps)(FilterName);
-
-export {
-  FilterName,
-  FilterNameContainer
-};
+export default FilterNameContainer;

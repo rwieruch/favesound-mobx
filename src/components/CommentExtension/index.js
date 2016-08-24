@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions/index';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
+import * as actions from '../../actions/index';
 import { getCommentProperty } from '../../services/string';
-import { ButtonMore } from '../../components/ButtonMore';
-import { Artwork } from '../../components/Artwork';
+import ButtonMore from '../../components/ButtonMore';
+import Artwork from '../../components/Artwork';
 import { fromNow } from '../../services/track';
 
 function CommentExtension({
@@ -48,42 +47,37 @@ function CommentExtension({
   );
 }
 
-function mapStateToProps(state, props) {
-  const { activity } = props;
-  const requestInProcess = state.request[getCommentProperty(activity.id)];
-  const nextHref = state.paginate[getCommentProperty(activity.id)];
+const CommentExtensionContainer = inject(
+  'commentStore',
+  'entityStore',
+  'requestStore',
+  'paginateStore'
+)(observer(({
+  activity,
+  commentStore,
+  entityStore,
+  requestStore,
+  paginateStore
+}) => {
+  return (
+    <CommentExtension
+      activity={activity}
+      commentIds={commentStore.comments.get(activity.id)}
+      commentEntities={entityStore.getEntitiesByKey('comments')}
+      userEntities={entityStore.getEntitiesByKey('users')}
+      requestInProcess={requestStore.getRequestByType(getCommentProperty(activity.id))}
+      nextHref={paginateStore.getLinkByType(getCommentProperty(activity.id))}
+      onFetchComments={actions.fetchComments}
+    />
+  );
+}));
 
-  return {
-    activity,
-    commentIds: state.comment.comments[activity.id],
-    commentEntities: state.entities.comments,
-    userEntities: state.entities.users,
-    requestInProcess,
-    nextHref,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onFetchComments: bindActionCreators(actions.fetchComments, dispatch),
-    // createComment: bindActionCreators(actions.createComment, dispatch),
-  };
-}
-
-CommentExtension.propTypes = {
-  // createComment: React.PropTypes.func,
-  onFetchComments: React.PropTypes.func,
-  activity: React.PropTypes.object,
-  commentIds: React.PropTypes.array,
-  commentEntities: React.PropTypes.object,
-  userEntities: React.PropTypes.object,
-  requestInProcess: React.PropTypes.bool,
-  nextHref: React.PropTypes.string,
+CommentExtensionContainer.wrappedComponent.propTypes = {
+  activity: React.PropTypes.object.isRequired,
+  commentStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
 };
 
-const CommentExtensionContainer = connect(mapStateToProps, mapDispatchToProps)(CommentExtension);
-
-export {
-  CommentExtension,
-  CommentExtensionContainer
-};
+export default CommentExtensionContainer;

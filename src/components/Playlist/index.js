@@ -1,22 +1,37 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
-import { TrackPlaylistContainer } from '../../components/Track';
-import { ButtonInline } from '../../components/ButtonInline';
+import TrackPlaylist from '../../components/Track/playlist';
+import ButtonInline from '../../components/ButtonInline';
 
-function PlaylistItem({ activity }) {
+const PlaylistItem = inject(
+  'entityStore',
+  'playerStore'
+)(observer(({
+  activity,
+  entityStore,
+  playerStore
+}) => {
   return (
     <li>
-      <TrackPlaylistContainer activity={activity} />
+      <TrackPlaylist
+        activity={activity}
+        userEntities={entityStore.getEntitiesByKey('users')}
+        isPlaying={playerStore.isPlaying}
+        activeTrackId={playerStore.activeTrackId}
+        onActivateTrack={actions.activateTrack}
+        onRemoveTrackFromPlaylist={actions.removeTrackFromPlaylist}
+      />
     </li>
   );
-}
+}));
 
-function PlaylistMenu({ onClearPlaylist }) {
+const PlaylistMenu = observer(({
+  onClearPlaylist
+}) => {
   return (
     <div className="playlist-menu">
       <div>Player Queue</div>
@@ -27,19 +42,23 @@ function PlaylistMenu({ onClearPlaylist }) {
       </div>
     </div>
   );
-}
+});
 
-function Playlist({ toggle, playlist, trackEntities, onClearPlaylist }) {
+const Playlist = observer(({
+  playlistToggle,
+  playlist,
+  trackEntities
+}) => {
   const playlistClass = classNames(
     'playlist',
     {
-      'playlist-visible': toggle[toggleTypes.PLAYLIST]
+      'playlist-visible': playlistToggle
     }
   );
 
   return (
     <div className={playlistClass}>
-      <PlaylistMenu onClearPlaylist={onClearPlaylist} />
+      <PlaylistMenu onClearPlaylist={actions.clearPlaylist} />
       <ul>
         {map((id, idx) => {
           return <PlaylistItem key={idx} activity={trackEntities[id]} />;
@@ -47,32 +66,30 @@ function Playlist({ toggle, playlist, trackEntities, onClearPlaylist }) {
       </ul>
     </div>
   );
-}
+});
 
-function mapStateToProps(state) {
-  return {
-    toggle: state.toggle,
-    playlist: state.player.playlist,
-    trackEntities: state.entities.tracks
-  };
-}
+const PlaylistContainer = inject(
+  'toggleStore',
+  'playerStore',
+  'entityStore'
+)(observer(({
+  toggleStore,
+  playerStore,
+  entityStore
+}) => {
+  return (
+    <Playlist
+      playlistToggle={toggleStore.toggles.get(toggleTypes.PLAYLIST)}
+      playlist={playerStore.playlist}
+      trackEntities={entityStore.getEntitiesByKey('tracks')}
+    />
+  );
+}));
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onClearPlaylist: bindActionCreators(actions.clearPlaylist, dispatch),
-  };
-}
-
-Playlist.propTypes = {
-  toggle: React.PropTypes.object,
-  playlist: React.PropTypes.array,
-  trackEntities: React.PropTypes.object,
-  onClearPlaylist: React.PropTypes.func
+PlaylistContainer.wrappedComponent.propTypes = {
+  entityStore: React.PropTypes.object,
+  playerStore: React.PropTypes.object,
+  toggleStore: React.PropTypes.object,
 };
 
-const PlaylistContainer = connect(mapStateToProps, mapDispatchToProps)(Playlist);
-
-export {
-  Playlist,
-  PlaylistContainer
-};
+export default PlaylistContainer;

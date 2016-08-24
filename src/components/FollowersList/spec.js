@@ -10,8 +10,8 @@ describe('FollowersList', () => {
     nextHref: '/foo',
     requestInProcess: false,
     isExpanded: false,
-    setToggle: () => {},
-    fetchFollowers: () => {}
+    onSetToggle: () => {},
+    onFetchFollowers: () => {}
   };
 
   it('renders', () => {

@@ -1,26 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import * as requestTypes from '../../constants/requestTypes';
 import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
-import { List } from '../../components/List';
+import List from '../../components/List';
 
-function FollowingsList({
-  currentUser,
+export function FollowingsList({
   userEntities,
-  followings,
   nextHref,
   requestInProcess,
   isExpanded,
+  favorites,
+  currentUser,
   onSetToggle,
   onFetchFollowings
 }) {
   return (
     <List
       title="Followings"
-      ids={followings}
+      ids={favorites}
       entities={userEntities}
       nextHref={nextHref}
       requestInProcess={requestInProcess}
@@ -33,42 +32,42 @@ function FollowingsList({
   );
 }
 
-function mapStateToProps(state) {
-  const nextHref = state.paginate[paginateLinkTypes.FOLLOWINGS];
-  const requestInProcess = state.request[requestTypes.FOLLOWINGS];
-  const isExpanded = state.toggle[toggleTypes.FOLLOWINGS];
+const FollowingsListContainer = inject(
+  'sessionStore',
+  'userStore',
+  'entityStore',
+  'paginateStore',
+  'requestStore',
+  'toggleStore'
+)(observer(({
+  sessionStore,
+  userStore,
+  entityStore,
+  paginateStore,
+  requestStore,
+  toggleStore
+}) => {
+  return (
+    <FollowingsList
+      userEntities={entityStore.getEntitiesByKey('users')}
+      nextHref={paginateStore.getLinkByType(paginateLinkTypes.FOLLOWINGS)}
+      requestInProcess={requestStore.getRequestByType(requestTypes.FOLLOWINGS)}
+      isExpanded={toggleStore.toggles.get(toggleTypes.FOLLOWINGS)}
+      favorites={userStore.followings}
+      currentUser={sessionStore.user}
+      onFetchFollowings={actions.fetchFollowings}
+      onSetToggle={toggleStore.setToggle}
+    />
+  );
+}));
 
-  return {
-    currentUser: state.session.user,
-    userEntities: state.entities.users,
-    followings: state.user.followings,
-    nextHref,
-    requestInProcess,
-    isExpanded
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onSetToggle: bindActionCreators(actions.setToggle, dispatch),
-    onFetchFollowings: bindActionCreators(actions.fetchFollowings, dispatch)
-  };
-}
-
-FollowingsList.propTypes = {
-  currentUser: React.PropTypes.object,
-  userEntities: React.PropTypes.object,
-  followings: React.PropTypes.array,
-  requestsInProcess: React.PropTypes.object,
-  paginateLinks: React.PropTypes.object,
-  toggle: React.PropTypes.object,
-  onSetToggle: React.PropTypes.func,
-  onFetchFollowings: React.PropTypes.func
+FollowingsListContainer.wrappedComponent.propTypes = {
+  sessionStore: React.PropTypes.object.isRequired,
+  userStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
+  toggleStore: React.PropTypes.object.isRequired
 };
 
-const FollowingsListContainer = connect(mapStateToProps, mapDispatchToProps)(FollowingsList);
-
-export {
-  FollowingsList,
-  FollowingsListContainer
-};
+export default FollowingsListContainer;

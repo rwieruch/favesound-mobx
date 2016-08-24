@@ -1,42 +1,23 @@
 import Cookies from 'js-cookie';
 import { CLIENT_ID, OAUTH_TOKEN, REDIRECT_URI } from '../../constants/authentification';
-import * as actionTypes from '../../constants/actionTypes';
 import { apiUrl } from '../../services/api';
 import { fetchFollowings, fetchActivities, fetchFollowers, fetchFavorites } from '../../actions/user';
+import userStore from '../../stores/userStore';
+import sessionStore from '../../stores/sessionStore';
 
-function setSession(session) {
-  return {
-    type: actionTypes.SET_SESSION,
-    session
-  };
-}
-
-function setUser(user) {
-  return {
-    type: actionTypes.SET_USER,
-    user
-  };
-}
-
-function resetSession() {
-  return {
-    type: actionTypes.RESET_SESSION
-  };
-}
-
-const fetchUser = () => (dispatch) => {
+function fetchUser() {
   fetch(apiUrl(`me`, '?'))
-    .then(response => response.json())
-    .then(me => {
-      dispatch(setUser(me));
-      dispatch(fetchActivities());
-      dispatch(fetchFavorites(me));
-      dispatch(fetchFollowings(me));
-      dispatch(fetchFollowers(me));
+    .then((response) => response.json())
+    .then((me) => {
+      sessionStore.setMe(me);
+      fetchActivities();
+      fetchFavorites(me);
+      fetchFollowings(me);
+      fetchFollowers(me);
     });
-};
+}
 
-export const login = () => (dispatch) => {
+export function login() {
   const client_id = CLIENT_ID;
   const redirect_uri = REDIRECT_URI;
   /* eslint-disable no-undef */
@@ -44,13 +25,16 @@ export const login = () => (dispatch) => {
 
   SC.connect().then((session) => {
     Cookies.set(OAUTH_TOKEN, session.oauth_token);
-    dispatch(setSession(session));
-    dispatch(fetchUser());
+
+    sessionStore.setSession(session);
+    fetchUser();
   });
   /* eslint-enable no-undef */
-};
+}
 
-export const logout = () => (dispatch) => {
+export function logout() {
   Cookies.remove(OAUTH_TOKEN);
-  dispatch(resetSession());
-};
+
+  sessionStore.reset();
+  userStore.reset();
+}

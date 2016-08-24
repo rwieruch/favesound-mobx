@@ -3,32 +3,29 @@ import SC from 'soundcloud';
 /*eslint-enable */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { useStrict } from 'mobx';
+import { Provider } from 'mobx-react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-import { Provider } from 'react-redux';
-import configureStore from './stores/configureStore';
-import { Dashboard } from './components/Dashboard';
-import { BrowseContainer } from './components/Browse';
-import { Fave } from './components/Fave';
+import Dashboard from './components/Dashboard';
+import Browse from './components/Browse';
 import Callback from './components/Callback';
 import App from './components/App';
-import { browse, dashboard, fave, callback } from './constants/pathnames';
+import { browse, dashboard, callback } from './constants/pathnames';
+import * as stores from './stores';
+
+useStrict(true);
 
 require('../styles/index.scss');
 
-const store = configureStore();
-const history = syncHistoryWithStore(browserHistory, store);
-
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
+  <Provider { ...stores }>
+    <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={BrowseContainer} />
+        <IndexRoute component={Browse} />
         <Route path={callback} component={Callback} />
         <Route path={dashboard} component={Dashboard} />
-        <Route path={browse} component={BrowseContainer} />
-        <Route path={fave} component={Fave} />
-        <Route path="*" component={BrowseContainer} />
+        <Route path={browse} component={Browse} />
+        <Route path="*" component={Browse} />
       </Route>
     </Router>
   </Provider>,

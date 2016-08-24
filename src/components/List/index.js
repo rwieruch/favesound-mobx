@@ -1,12 +1,14 @@
 import React from 'react';
 import map from '../../services/map';
+import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
-import { TrackPreviewContainer } from '../../components/Track';
-import { UserPreviewContainer } from '../../components/User';
-import { ButtonMore } from '../../components/ButtonMore';
-import { ButtonInline } from '../../components/ButtonInline';
+import * as actions from '../../actions/index';
+import TrackPreview from '../../components/Track/preview';
+import UserPreview from '../../components/User';
+import ButtonMore from '../../components/ButtonMore';
+import ButtonInline from '../../components/ButtonInline';
 
-function Chevron({ ids, isExpanded }) {
+export function Chevron({ ids, isExpanded }) {
   const chevronClass = classNames(
     'fa',
     {
@@ -17,6 +19,26 @@ function Chevron({ ids, isExpanded }) {
 
   return ids.length > 4 ? <i className={chevronClass} /> : null;
 }
+
+const TrackPreviewContainer = inject(
+  'entityStore',
+  'playerStore'
+)(observer(({
+  activity,
+  entityStore,
+  playerStore
+}) => {
+  return (
+    <TrackPreview
+      activity={activity}
+      isPlaying={playerStore.isPlaying}
+      activeTrackId={playerStore.activeTrackId}
+      userEntities={entityStore.getEntitiesByKey('users')}
+      onActivateTrack={actions.activateTrack}
+      onAddTrackToPlaylist={actions.addTrackToPlaylist}
+    />
+  );
+}));
 
 function SpecificItemTrack({ entities, trackId }) {
   return (
@@ -29,12 +51,12 @@ function SpecificItemTrack({ entities, trackId }) {
 function SpecificItemUser({ entities, userId }) {
   return (
     <li>
-      <UserPreviewContainer user={entities[userId]} />
+      <UserPreview user={entities[userId]} />
     </li>
   );
 }
 
-function SpecificList({ ids, kind, entities }) {
+export function SpecificList({ ids, kind, entities }) {
   if (kind === 'USER') {
     return (
       <div className="list-content">
@@ -102,7 +124,7 @@ function List({
 }
 
 List.propTypes = {
-  ids: React.PropTypes.array,
+  ids: React.PropTypes.object,
   isExpanded: React.PropTypes.bool,
   title: React.PropTypes.string,
   kind: React.PropTypes.string,
@@ -113,9 +135,4 @@ List.propTypes = {
   onFetchMore: React.PropTypes.func
 };
 
-export {
-  List,
-
-  SpecificList,
-  Chevron,
-};
+export default List;

@@ -1,26 +1,18 @@
-import * as actionTypes from '../../constants/actionTypes';
 import { apiUrl } from '../../services/api';
-import { mergeFavorites } from '../../actions/user';
-import { syncEntities } from '../../actions/entities';
+import userStore from '../../stores/userStore';
+import entityStore from '../../stores/entityStore';
 
-export function removeFromFavorites(trackId) {
-  return {
-    type: actionTypes.REMOVE_FROM_FAVORITES,
-    trackId
-  };
-}
-
-export const like = (track) => (dispatch) => {
+export function like(track) {
   fetch(apiUrl(`me/favorites/${track.id}`, '?'), { method: track.user_favorite ? 'delete' : 'put' })
     .then(response => response.json())
     .then(() => {
       if (track.user_favorite) {
-        dispatch(removeFromFavorites(track.id));
+        userStore.removeFromFavorites(track.id);
       } else {
-        dispatch(mergeFavorites([track.id]));
+        userStore.mergeFavorites([track.id]);
       }
 
       const updateEntity = Object.assign({}, track, { user_favorite: !track.user_favorite });
-      dispatch(syncEntities(updateEntity, 'tracks'));
+      entityStore.syncEntities(updateEntity, 'tracks');
     });
-};
+}

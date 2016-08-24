@@ -1,23 +1,26 @@
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React from 'react';
+import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
-import { UserPreview } from './preview';
+import UserPreview from './preview';
 
-function mapStateToProps(state, props) {
-  return {
-    followings: state.user.followings,
-    user: props.user
-  };
-}
+const UserPreviewContainer = inject(
+  'userStore'
+)(observer(({
+  user,
+  userStore
+}) => {
+  return (
+    <UserPreview
+      followings={userStore.followings}
+      user={user}
+      onFollow={actions.follow}
+    />
+  );
+}));
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onFollow: bindActionCreators(actions.follow, dispatch)
-  };
-}
-
-const UserPreviewContainer = connect(mapStateToProps, mapDispatchToProps)(UserPreview);
-
-export {
-  UserPreviewContainer
+UserPreviewContainer.wrappedComponent.propTypes = {
+  user: React.PropTypes.object,
+  userStore: React.PropTypes.object,
 };
+
+export default UserPreviewContainer;

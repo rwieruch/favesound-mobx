@@ -8,6 +8,8 @@ function ButtonInline({ onClick, children }) {
   );
 }
 
-export {
-  ButtonInline
+ButtonInline.propTypes = {
+  onClick: React.PropTypes.func,
 };
+
+export default ButtonInline;

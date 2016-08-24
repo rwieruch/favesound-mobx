@@ -1,9 +1,9 @@
 import React from 'react';
 import map from '../../services/map';
 import classNames from 'classnames';
-import { ButtonInline } from '../../components/ButtonInline';
+import ButtonInline from '../../components/ButtonInline';
 
-function Action({ actionItem }) {
+export function Action({ actionItem }) {
   return (
     <span className="action-item">
       <ButtonInline onClick={actionItem.fn}>
@@ -35,8 +35,4 @@ Actions.propTypes = {
   isVisible: React.PropTypes.bool
 };
 
-export {
-  Actions,
-
-  Action
-};
+export default Actions;

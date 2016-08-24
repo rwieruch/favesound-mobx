@@ -1,8 +1,8 @@
 import React from 'react';
-import { Artwork } from '../../components/Artwork';
-import { Permalink } from '../../components/Permalink';
-import { InfoList } from '../../components/InfoList';
-import { Actions } from '../../components/HoverActions';
+import Artwork from '../../components/Artwork';
+import Permalink from '../../components/Permalink';
+import InfoList from '../../components/InfoList';
+import Actions from '../../components/HoverActions';
 import { isSameTrackAndPlaying, isSameTrack } from '../../services/player';
 
 function TrackPreview({
@@ -68,6 +68,4 @@ TrackPreview.propTypes = {
   onAddTrackToPlaylist: React.PropTypes.func
 };
 
-export {
-  TrackPreview
-};
+export default TrackPreview;

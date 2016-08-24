@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/index';
 import * as toggleTypes from '../../constants/toggleTypes';
 import { addAccessTokenWith } from '../../services/api';
-import { ButtonInline } from '../../components/ButtonInline';
+import ButtonInline from '../../components/ButtonInline';
 
+@inject('sessionStore', 'entityStore', 'playerStore', 'toggleStore') @observer
 class Player extends React.Component {
 
   componentDidUpdate() {
@@ -15,32 +15,31 @@ class Player extends React.Component {
 
     if (!audioElement) { return; }
 
-    const { isPlaying } = this.props;
-    if (isPlaying) {
+    if (this.props.playerStore.isPlaying) {
       audioElement.play();
     } else {
       audioElement.pause();
     }
   }
 
-  renderNav() {
-    const {
-      currentUser,
-      activeTrackId,
-      isPlaying,
-      entities,
-      playlist,
-      onSetToggle,
-      onActivateIteratedTrack,
-      onLike,
-      onTogglePlayTrack
-    } = this.props;
+  render() {
+    const { sessionStore, entityStore, playerStore, toggleStore } = this.props;
+    const { activeTrackId, isPlaying, playlist } = playerStore;
+    const userEntities = entityStore.getEntitiesByKey('users');
+    const trackEntities = entityStore.getEntitiesByKey('tracks');
 
     if (!activeTrackId) { return null; }
 
-    const track = entities.tracks[activeTrackId];
+    const track = trackEntities[activeTrackId];
     const { user, title, stream_url } = track;
-    const { username } = entities.users[user];
+    const { username } = userEntities[user];
+
+    const playerClass = classNames(
+      'player',
+      {
+        'player-visible': activeTrackId
+      }
+    );
 
     const playClass = classNames(
       'fa',
@@ -58,90 +57,52 @@ class Player extends React.Component {
     );
 
     return (
-      <div className="player-content">
-        <div className="player-content-action">
-          <ButtonInline onClick={() => onActivateIteratedTrack(activeTrackId, -1)}>
-            <i className="fa fa-step-backward" />
-          </ButtonInline>
+      <div className={playerClass}>
+        <div className="player-content">
+          <div className="player-content-action">
+            <ButtonInline onClick={() => actions.activateIteratedTrack(activeTrackId, -1)}>
+              <i className="fa fa-step-backward" />
+            </ButtonInline>
+          </div>
+          <div className="player-content-action">
+            <ButtonInline onClick={() => actions.togglePlayTrack(!isPlaying)}>
+              <i className={playClass} />
+            </ButtonInline>
+          </div>
+          <div className="player-content-action">
+            <ButtonInline onClick={() => actions.activateIteratedTrack(activeTrackId, 1)}>
+              <i className="fa fa-step-forward" />
+            </ButtonInline>
+          </div>
+          <div className="player-content-name">
+            {username} - {title}
+          </div>
+          <div className="player-content-action">
+            <ButtonInline onClick={() => toggleStore.setToggle(toggleTypes.PLAYLIST)}>
+              <i className="fa fa-th-list" /> {playlist.length}
+            </ButtonInline>
+          </div>
+          <div className="player-content-action">
+            {
+              sessionStore.user ?
+                <ButtonInline onClick={() => actions.like(track)}>
+                  <i className={likeClass} />
+                </ButtonInline> : null
+            }
+          </div>
+          <audio id="audio" ref="audio" src={addAccessTokenWith(stream_url, '?')}></audio>
         </div>
-        <div className="player-content-action">
-          <ButtonInline onClick={() => onTogglePlayTrack(!isPlaying)}>
-            <i className={playClass} />
-          </ButtonInline>
-        </div>
-        <div className="player-content-action">
-          <ButtonInline onClick={() => onActivateIteratedTrack(activeTrackId, 1)}>
-            <i className="fa fa-step-forward" />
-          </ButtonInline>
-        </div>
-        <div className="player-content-name">
-          {username} - {title}
-        </div>
-        <div className="player-content-action">
-          <ButtonInline onClick={() => onSetToggle(toggleTypes.PLAYLIST)}>
-            <i className="fa fa-th-list" /> {playlist.length}
-          </ButtonInline>
-        </div>
-        <div className="player-content-action">
-          {
-            currentUser ?
-            <ButtonInline onClick={() => onLike(track)}>
-              <i className={likeClass} />
-            </ButtonInline> : null
-          }
-        </div>
-        <audio id="audio" ref="audio" src={addAccessTokenWith(stream_url, '?')}></audio>
       </div>
     );
   }
 
-  render() {
-    const playerClass = classNames(
-      'player',
-      {
-        'player-visible': this.props.activeTrackId
-      }
-    );
-
-    return <div className={playerClass}>{this.renderNav()}</div>;
-  }
-
 }
 
-function mapStateToProps(state) {
-  return {
-    currentUser: state.session.user,
-    activeTrackId: state.player.activeTrackId,
-    isPlaying: state.player.isPlaying,
-    entities: state.entities,
-    playlist: state.player.playlist,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onTogglePlayTrack: bindActionCreators(actions.togglePlayTrack, dispatch),
-    onSetToggle: bindActionCreators(actions.setToggle, dispatch),
-    onActivateIteratedTrack: bindActionCreators(actions.activateIteratedTrack, dispatch),
-    onLike: bindActionCreators(actions.like, dispatch)
-  };
-}
-
-Player.propTypes = {
-  currentUser: React.PropTypes.object,
-  activeTrackId: React.PropTypes.number,
-  isPlaying: React.PropTypes.bool,
-  entities: React.PropTypes.object,
-  playlist: React.PropTypes.array,
-  onTogglePlayTrack: React.PropTypes.func,
-  onSetToggle: React.PropTypes.func,
-  onActivateIteratedTrack: React.PropTypes.func,
-  onLike: React.PropTypes.func
+Player.wrappedComponent.propTypes = {
+  sessionStore: React.PropTypes.object,
+  entityStore: React.PropTypes.object,
+  playerStore: React.PropTypes.object,
+  toggleStore: React.PropTypes.object,
 };
 
-const PlayerContainer = connect(mapStateToProps, mapDispatchToProps)(Player);
-
-export {
-  Player,
-  PlayerContainer
-};
+export default Player;

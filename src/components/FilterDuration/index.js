@@ -1,13 +1,11 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions/index';
 import * as filterTypes from '../../constants/filterTypes';
 import { DURATION_FILTER_NAMES } from '../../constants/durationFilter';
-import { ButtonActive } from '../../components/ButtonActive';
-import { ButtonInline } from '../../components/ButtonInline';
+import ButtonActive from '../../components/ButtonActive';
+import ButtonInline from '../../components/ButtonInline';
 
 function hasActiveFilter(activeDurationFilter) {
   const { FILTER_DURATION_TRACK, FILTER_DURATION_MIX } = filterTypes;
@@ -15,20 +13,20 @@ function hasActiveFilter(activeDurationFilter) {
 }
 
 function FilterDuration({
-  activeDurationFilter,
-  onDurationFilter,
+  durationFilterType,
+  onSetFilterDuration
 }) {
   const filterDurationIconClass = classNames(
     'stream-interaction-icon',
     {
-      'stream-interaction-icon-active': hasActiveFilter(activeDurationFilter)
+      'stream-interaction-icon-active': hasActiveFilter(durationFilterType)
     }
   );
 
   return (
     <div className="stream-interaction">
       <div className={filterDurationIconClass} title={'Filter Stream'}>
-        <ButtonInline onClick={() => onDurationFilter(filterTypes.ALL)}>
+        <ButtonInline onClick={() => onSetFilterDuration(filterTypes.ALL)}>
           <i className="fa fa-filter" />
         </ButtonInline>
       </div>
@@ -37,7 +35,7 @@ function FilterDuration({
           map((value, key) => {
             return (
               <span key={key}>
-                <ButtonActive onClick={() => onDurationFilter(value)} isActive={value === activeDurationFilter}>
+                <ButtonActive onClick={() => onSetFilterDuration(value)} isActive={value === durationFilterType}>
                   {DURATION_FILTER_NAMES[value]}
                 </ButtonActive>
               </span>
@@ -49,26 +47,21 @@ function FilterDuration({
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    activeDurationFilter: state.filter.durationFilterType
-  };
-}
+const FilterDurationContainer = inject(
+  'filterStore'
+)(observer(({
+  filterStore
+}) => {
+  return (
+    <FilterDuration
+      durationFilterType={filterStore.durationFilterType}
+      onSetFilterDuration={filterStore.setFilterDuration}
+    />
+  );
+}));
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onDurationFilter: (filterType) => bindActionCreators(actions.filterDuration, dispatch)(filterType)
-  };
-}
-
-FilterDuration.propTypes = {
-  activeDurationFilter: React.PropTypes.string,
-  onDurationFilter: React.PropTypes.func
+FilterDurationContainer.wrappedComponent.propTypes = {
+  filterStore: React.PropTypes.object.isRequired
 };
 
-const FilterDurationContainer = connect(mapStateToProps, mapDispatchToProps)(FilterDuration);
-
-export {
-  FilterDuration,
-  FilterDurationContainer
-};
+export default FilterDurationContainer;

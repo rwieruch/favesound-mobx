@@ -1,13 +1,14 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import classNames from 'classnames';
 import * as sortTypes from '../../constants/sortTypes';
 import * as filterTypes from '../../constants/filterTypes';
 import { WaveformSc } from '../../components/WaveformSc';
-import { TrackActionsContainer } from '../../components/TrackActions';
-import { Artwork } from '../../components/Artwork';
-import { ArtworkAction } from '../../components/ArtworkAction';
-import { Permalink } from '../../components/Permalink';
-import { InfoList } from '../../components/InfoList';
+import TrackActions from '../../components/TrackActions';
+import Artwork from '../../components/Artwork';
+import ArtworkAction from '../../components/ArtworkAction';
+import Permalink from '../../components/Permalink';
+import InfoList from '../../components/InfoList';
 import { durationFormat, fromNow } from '../../services/track';
 import { getPluralizedWithCount } from '../../services/pluralize';
 import { isSameTrackAndPlaying, isSameTrack } from '../../services/player';
@@ -24,18 +25,18 @@ function Duration({ duration, isActive }) {
   );
 }
 
-function TrackStream({
+const TrackStream = observer(({
+  idx,
   activity,
   activeTrackId,
   isPlaying,
-  idx,
   userEntities,
   typeReposts,
   typeTracks,
   activeSortType,
   activeDurationFilterType,
   onActivateTrack,
-}) {
+}) => {
   const {
     user,
     title,
@@ -89,11 +90,13 @@ function TrackStream({
     },
     {
       className: 'fa fa-comment',
-      count: comment_count
+      count: comment_count,
+      activeSort: activeSortType === sortTypes.SORT_COMMENTS
     },
     {
       className: 'fa fa-download',
-      count: download_count
+      count: download_count,
+      activeSort: activeSortType === sortTypes.SORT_DOWNLOADS
     }
   ];
 
@@ -123,7 +126,7 @@ function TrackStream({
             <InfoList information={information} />
           </div>
           <div className="track-content-footer-actions">
-            <TrackActionsContainer activity={activity} />
+            <TrackActions activity={activity} />
           </div>
         </div>
       </div>
@@ -132,7 +135,7 @@ function TrackStream({
       </div>
     </div>
   );
-}
+});
 
 function TrackIcon({ trackCount }) {
   const title = 'Released by ' + getPluralizedWithCount(trackCount, 'guy') + '.';
@@ -157,6 +160,4 @@ TrackStream.propTypes = {
   onActivateTrack: React.PropTypes.func,
 };
 
-export {
-  TrackStream
-};
+export default TrackStream;

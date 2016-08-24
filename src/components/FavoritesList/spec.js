@@ -10,8 +10,8 @@ describe('FavoritesList', () => {
     nextHref: '/foo',
     requestInProcess: false,
     isExpanded: false,
-    setToggle: () => {},
-    fetchFavorites: () => {}
+    onSetToggle: () => {},
+    onFetchFavorites: () => {}
   };
 
   it('renders', () => {

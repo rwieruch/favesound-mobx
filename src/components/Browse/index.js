@@ -1,13 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer, inject } from 'mobx-react';
 import { DEFAULT_GENRE } from '../../constants/genre';
-import { SORT_FUNCTIONS } from '../../constants/sort';
-import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import * as actions from '../../actions/index';
 import * as requestTypes from '../../constants/requestTypes';
 import Activities from '../../components/Activities';
+import StreamInteractions from '../../components/StreamInteractions';
 
+@inject('browseStore', 'entityStore', 'paginateStore', 'requestStore', 'filterStore', 'sortStore') @observer
 class Browse extends React.Component {
 
   constructor(props) {
@@ -26,27 +25,32 @@ class Browse extends React.Component {
   }
 
   fetchActivitiesByGenre() {
-    const { genre, paginateLinks } = this.props;
-    const nextHref = paginateLinks[genre];
-    this.props.fetchActivitiesByGenre(nextHref, genre);
+    const { location, paginateStore } = this.props;
+    const genre = location.query.genre || DEFAULT_GENRE;
+    const nextHref = paginateStore.getLinkByType(genre);
+    actions.fetchActivitiesByGenre(nextHref, genre);
   }
 
   needToFetchActivities() {
-    const { genre, browseActivities } = this.props;
-    return !browseActivities[genre] || browseActivities[genre].length < 20;
+    const { location, browseStore } = this.props;
+    const genre = location.query.genre || DEFAULT_GENRE;
+    const activitiesByGenre = browseStore.getByGenre(genre);
+    return (activitiesByGenre ? activitiesByGenre.toJS() : []).length < 20;
   }
 
   render() {
-    const { browseActivities, genre, requestsInProcess, trackEntities } = this.props;
+    const { browseStore, entityStore, requestStore, filterStore, location, sortStore } = this.props;
+    const genre = location.query.genre || DEFAULT_GENRE;
 
     return (
       <div className="browse">
+        <StreamInteractions />
         <Activities
-          requestInProcess={requestsInProcess[requestTypes.GENRES]}
-          ids={browseActivities[genre]}
-          entities={trackEntities}
-          activeFilter={DURATION_FILTER_FUNCTIONS.ALL}
-          activeSort={SORT_FUNCTIONS.NONE}
+          requestInProcess={requestStore.getRequestByType(requestTypes.GENRES)}
+          ids={browseStore.getByGenre(genre)}
+          entities={entityStore.getEntitiesByKey('tracks')}
+          activeFilter={filterStore.combinedFilters}
+          activeSort={sortStore.sortFn}
           scrollFunction={this.fetchActivitiesByGenre}
         />
       </div>
@@ -55,40 +59,13 @@ class Browse extends React.Component {
 
 }
 
-function mapStateToProps(state, routerState) {
-  return {
-    genre: routerState.location.query.genre,
-    browseActivities: state.browse,
-    requestsInProcess: state.request,
-    paginateLinks: state.paginate,
-    trackEntities: state.entities.tracks,
-    userEntities: state.entities.users
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchActivitiesByGenre: bindActionCreators(actions.fetchActivitiesByGenre, dispatch)
-  };
-}
-
-Browse.propTypes = {
-  genre: React.PropTypes.string,
-  browseActivities: React.PropTypes.object,
-  requestsInProcess: React.PropTypes.object,
-  paginateLinks: React.PropTypes.object,
-  trackEntities: React.PropTypes.object,
-  userEntities: React.PropTypes.object,
-  fetchActivitiesByGenre: React.PropTypes.func
+Browse.wrappedComponent.propTypes = {
+  browseStore: React.PropTypes.object.isRequired,
+  entityStore: React.PropTypes.object.isRequired,
+  paginateStore: React.PropTypes.object.isRequired,
+  requestStore: React.PropTypes.object.isRequired,
+  filterStore: React.PropTypes.object.isRequired,
+  sortStore: React.PropTypes.object.isRequired,
 };
 
-Browse.defaultProps = {
-  genre: DEFAULT_GENRE
-};
-
-const BrowseContainer = connect(mapStateToProps, mapDispatchToProps)(Browse);
-
-export {
-  Browse,
-  BrowseContainer
-};
+export default Browse;

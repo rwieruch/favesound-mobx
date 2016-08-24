@@ -1,29 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
-import { CommentExtensionContainer } from '../../components/CommentExtension';
+import CommentExtension from '../../components/CommentExtension';
+import commentStore from '../../stores/commentStore';
 
 function TrackExtension({ activity, isOpenComment }) {
   if (isOpenComment) {
-    return <CommentExtensionContainer activity={activity} />;
+    return <CommentExtension activity={activity} />;
   }
 
-  return <noscript />;
-}
-
-function mapStateToProps(state, props) {
-  const { activity } = props;
-  return {
-    activity,
-    isOpenComment: state.comment.openComments[activity.id]
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    openComments: bindActionCreators(actions.openComments, dispatch),
-  };
+  return null;
 }
 
 TrackExtension.propTypes = {
@@ -31,9 +17,18 @@ TrackExtension.propTypes = {
   openComments: React.PropTypes.func,
 };
 
-const TrackExtensionContainer = connect(mapStateToProps, mapDispatchToProps)(TrackExtension);
+const TrackExtensionContainer = observer(({ activity }) => {
+  return (
+    <TrackExtension
+      activity={activity}
+      isOpenComment={commentStore.openComments.get(activity.id)}
+      openComments={() => actions.openComments(activity.id)}
+    />
+  );
+});
 
-export {
-  TrackExtension,
-  TrackExtensionContainer
+TrackExtensionContainer.propTypes = {
+  activity: React.PropTypes.object,
 };
+
+export default TrackExtensionContainer;
