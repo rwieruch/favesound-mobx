@@ -4,7 +4,7 @@ The SoundCloud Client in React + MobX made with passion!
 
 Uses mobx, mobx-react, normalizr, react, lodash-fp, airbnb-extended eslint, enzyme and the Soundcloud API.
 
-![FaveSound](https://s31.postimg.org/bz6rw0kez/Screen_Shot_2016_07_08_at_18_15_17.png)
+![FaveSound](https://s15.postimg.org/3t5581x2j/Screen_Shot_2016_08_25_at_15_18_44.png)
 
 Features:
 * login to SoundCloud
