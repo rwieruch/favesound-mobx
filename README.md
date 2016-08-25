@@ -23,7 +23,10 @@ Refactored from original version in Redux:
 * [Live](http://www.favesound.de/)
 * [Repository](https://github.com/rwieruch/favesound-redux)
 
-Create your own SoundCloud application with [React + MobX + SoundCloud Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud) + [Tutorial 1: The SoundCloud Client in React + Redux](http://www.robinwieruch.de/the-soundcloud-client-in-react-redux/) + [Tutorial 2: Refactoring to MobX](http://www.robinwieruch.de/mobx-react/).
+Create your own SoundCloud application:
+* [React + MobX + SoundCloud Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud)
+* [Tutorial 1: The SoundCloud Client in React + Redux](http://www.robinwieruch.de/the-soundcloud-client-in-react-redux/)
+* [Tutorial 2: Refactoring to MobX](http://www.robinwieruch.de/mobx-react/).
 
 Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Twitter](https://twitter.com/rwieruch) or my [Blog](http://www.robinwieruch.de/).
 
