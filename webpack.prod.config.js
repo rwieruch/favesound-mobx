@@ -14,9 +14,9 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.jsx?$/,
+      test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loader: 'react-hot!babel'
+      loader: "babel-loader"
     },
     {
       test: /\.scss$/,
@@ -24,6 +24,7 @@ module.exports = {
     }]
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
     }),
