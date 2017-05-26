@@ -19,14 +19,14 @@ Features:
 * filter tracks by duration
 * search tracks by name and artist
 
-Refactored from original version in Redux: 
-* [Live](http://www.favesound.de/)
+Refactored from original version in Redux:
+* [Demo](http://www.favesound.de/)
 * [Repository](https://github.com/rwieruch/favesound-redux)
 
 Create your own SoundCloud application:
-* [React + MobX + SoundCloud Boilerplate Project](https://github.com/rwieruch/react-mobx-soundcloud)
 * [Tutorial 1: The SoundCloud Client in React + Redux](http://www.robinwieruch.de/the-soundcloud-client-in-react-redux/)
 * [Tutorial 2: Refactoring to MobX](http://www.robinwieruch.de/mobx-react/).
+* [Boilerplate: React + MobX + SoundCloud](https://github.com/rwieruch/react-mobx-soundcloud)
 
 Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Twitter](https://twitter.com/rwieruch) or my [Blog](http://www.robinwieruch.de/).
 
@@ -34,9 +34,10 @@ Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Tw
 
 1. Clone Repository: `git clone git@github.com:rwieruch/favesound-mobx.git`
 2. Exchange CLIENT_ID in `../src/constants/authentification.js` with your own from [SoundCloud for Developers](https://developers.soundcloud.com/) and use `http://localhost:8080/callback` as `Redirect_URI` for your Soundcloud App
-3. npm install
-4. npm start
-5. npm test
+3. `npm install`
+4. `npm start`
+5. visit http://localhost:8080
+6. `npm test`
 
 ## Contribute
 
