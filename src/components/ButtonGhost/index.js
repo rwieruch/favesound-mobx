@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -17,8 +18,8 @@ function ButtonGhost({ onClick, isSmall, children }) {
 }
 
 ButtonGhost.propTypes = {
-  isSmall: React.PropTypes.bool,
-  onClick: React.PropTypes.func,
+  isSmall: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default ButtonGhost;

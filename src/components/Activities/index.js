@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
@@ -70,11 +71,11 @@ const Activities = observer(({
 });
 
 Activities.propTypes = {
-  requestInProcess: React.PropTypes.bool,
-  ids: React.PropTypes.object,
-  entities: React.PropTypes.object,
-  activeFilter: React.PropTypes.func,
-  activeSort: React.PropTypes.func,
+  requestInProcess: PropTypes.bool,
+  ids: PropTypes.object,
+  entities: PropTypes.object,
+  activeFilter: PropTypes.func,
+  activeSort: PropTypes.func,
 };
 
 export default FetchOnScroll(Activities);

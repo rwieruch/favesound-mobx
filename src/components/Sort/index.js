@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import map from '../../services/map';
 import classNames from 'classnames';
@@ -53,7 +54,7 @@ const SortContainer = inject(
 }));
 
 SortContainer.wrappedComponent.propTypes = {
-  sortStore: React.PropTypes.object.isRequired
+  sortStore: PropTypes.object.isRequired
 };
 
 export default SortContainer;

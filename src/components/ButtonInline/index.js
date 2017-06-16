@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 function ButtonInline({ onClick, children }) {
@@ -9,7 +10,7 @@ function ButtonInline({ onClick, children }) {
 }
 
 ButtonInline.propTypes = {
-  onClick: React.PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 export default ButtonInline;

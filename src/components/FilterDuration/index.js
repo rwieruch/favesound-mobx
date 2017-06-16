@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
@@ -61,7 +62,7 @@ const FilterDurationContainer = inject(
 }));
 
 FilterDurationContainer.wrappedComponent.propTypes = {
-  filterStore: React.PropTypes.object.isRequired
+  filterStore: PropTypes.object.isRequired
 };
 
 export default FilterDurationContainer;
