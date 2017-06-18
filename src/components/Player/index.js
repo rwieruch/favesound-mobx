@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { observer, inject } from 'mobx-react';
@@ -99,10 +100,10 @@ class Player extends React.Component {
 }
 
 Player.wrappedComponent.propTypes = {
-  sessionStore: React.PropTypes.object,
-  entityStore: React.PropTypes.object,
-  playerStore: React.PropTypes.object,
-  toggleStore: React.PropTypes.object,
+  sessionStore: PropTypes.object,
+  entityStore: PropTypes.object,
+  playerStore: PropTypes.object,
+  toggleStore: PropTypes.object,
 };
 
 export default Player;

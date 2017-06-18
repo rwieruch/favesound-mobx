@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
@@ -39,13 +40,13 @@ const StreamActivities = inject(
 }));
 
 StreamActivities.wrappedComponent.propTypes = {
-  userStore: React.PropTypes.object,
-  entityStore: React.PropTypes.object,
-  playerStore: React.PropTypes.object,
-  paginateStore: React.PropTypes.object,
-  requestStore: React.PropTypes.object,
-  sortStore: React.PropTypes.object,
-  filterStore: React.PropTypes.object
+  userStore: PropTypes.object,
+  entityStore: PropTypes.object,
+  playerStore: PropTypes.object,
+  paginateStore: PropTypes.object,
+  requestStore: PropTypes.object,
+  sortStore: PropTypes.object,
+  filterStore: PropTypes.object
 };
 
 export default StreamActivities;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
@@ -73,11 +74,11 @@ const CommentExtensionContainer = inject(
 }));
 
 CommentExtensionContainer.wrappedComponent.propTypes = {
-  activity: React.PropTypes.object.isRequired,
-  commentStore: React.PropTypes.object.isRequired,
-  entityStore: React.PropTypes.object.isRequired,
-  requestStore: React.PropTypes.object.isRequired,
-  paginateStore: React.PropTypes.object.isRequired,
+  activity: PropTypes.object.isRequired,
+  commentStore: PropTypes.object.isRequired,
+  entityStore: PropTypes.object.isRequired,
+  requestStore: PropTypes.object.isRequired,
+  paginateStore: PropTypes.object.isRequired,
 };
 
 export default CommentExtensionContainer;

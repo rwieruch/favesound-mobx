@@ -67,6 +67,7 @@
     "mobx-react": "4.1.8",
     "moment": "2.18.1",
     "normalizr": "2.0.0",
+    "prop-types": "15.5.10",
     "react": "15.0.2",
     "react-dom": "15.0.2",
     "react-router": "3.0.0",

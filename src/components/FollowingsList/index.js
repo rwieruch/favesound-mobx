@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import * as actions from '../../actions/index';
@@ -62,12 +63,12 @@ const FollowingsListContainer = inject(
 }));
 
 FollowingsListContainer.wrappedComponent.propTypes = {
-  sessionStore: React.PropTypes.object.isRequired,
-  userStore: React.PropTypes.object.isRequired,
-  entityStore: React.PropTypes.object.isRequired,
-  paginateStore: React.PropTypes.object.isRequired,
-  requestStore: React.PropTypes.object.isRequired,
-  toggleStore: React.PropTypes.object.isRequired
+  sessionStore: PropTypes.object.isRequired,
+  userStore: PropTypes.object.isRequired,
+  entityStore: PropTypes.object.isRequired,
+  paginateStore: PropTypes.object.isRequired,
+  requestStore: PropTypes.object.isRequired,
+  toggleStore: PropTypes.object.isRequired
 };
 
 export default FollowingsListContainer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
@@ -92,9 +93,9 @@ const Header = inject(
 }));
 
 Header.wrappedComponent.propTypes = {
-  sessionStore: React.PropTypes.object,
-  genre: React.PropTypes.string,
-  pathname: React.PropTypes.string,
+  sessionStore: PropTypes.object,
+  genre: PropTypes.string,
+  pathname: PropTypes.string,
 };
 
 Header.wrappedComponent.defaultProps = {

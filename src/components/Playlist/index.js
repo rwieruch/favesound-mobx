@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
@@ -87,9 +88,9 @@ const PlaylistContainer = inject(
 }));
 
 PlaylistContainer.wrappedComponent.propTypes = {
-  entityStore: React.PropTypes.object,
-  playerStore: React.PropTypes.object,
-  toggleStore: React.PropTypes.object,
+  entityStore: PropTypes.object,
+  playerStore: PropTypes.object,
+  toggleStore: PropTypes.object,
 };
 
 export default PlaylistContainer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import * as actions from '../../actions/index';
 import ButtonGhost from '../../components/ButtonGhost';
@@ -21,8 +22,8 @@ function TrackActions({ onOpenComments, onAddTrackToPlaylist }) {
 }
 
 TrackActions.propTypes = {
-  onOpenComments: React.PropTypes.func,
-  onAddTrackToPlaylist: React.PropTypes.func,
+  onOpenComments: PropTypes.func,
+  onAddTrackToPlaylist: PropTypes.func,
 };
 
 function TrackActionsContainer({ activity }) {

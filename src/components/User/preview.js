@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react';
 import find from 'lodash/fp/find';
@@ -50,9 +51,9 @@ const UserPreview = observer(({
 });
 
 UserPreview.propTypes = {
-  followings: React.PropTypes.object,
-  user: React.PropTypes.object,
-  onFollow: React.PropTypes.func
+  followings: PropTypes.object,
+  user: PropTypes.object,
+  onFollow: PropTypes.func
 };
 
 export default UserPreview;

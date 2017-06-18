@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
@@ -47,7 +48,7 @@ const FilterNameContainer = inject(
 }));
 
 FilterNameContainer.wrappedComponent.propTypes = {
-  filterStore: React.PropTypes.object.isRequired
+  filterStore: PropTypes.object.isRequired
 };
 
 export default FilterNameContainer;

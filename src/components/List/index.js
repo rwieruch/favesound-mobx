@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import map from '../../services/map';
 import { observer, inject } from 'mobx-react';
@@ -124,15 +125,15 @@ function List({
 }
 
 List.propTypes = {
-  ids: React.PropTypes.object,
-  isExpanded: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  kind: React.PropTypes.string,
-  requestInProcess: React.PropTypes.bool,
-  entities: React.PropTypes.object,
-  nextHref: React.PropTypes.string,
-  onToggleMore: React.PropTypes.func,
-  onFetchMore: React.PropTypes.func
+  ids: PropTypes.object,
+  isExpanded: PropTypes.bool,
+  title: PropTypes.string,
+  kind: PropTypes.string,
+  requestInProcess: PropTypes.bool,
+  entities: PropTypes.object,
+  nextHref: PropTypes.string,
+  onToggleMore: PropTypes.func,
+  onFetchMore: PropTypes.func
 };
 
 export default List;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react';
 import * as actions from '../../actions/index';
@@ -13,8 +14,8 @@ function TrackExtension({ activity, isOpenComment }) {
 }
 
 TrackExtension.propTypes = {
-  activity: React.PropTypes.object,
-  openComments: React.PropTypes.func,
+  activity: PropTypes.object,
+  openComments: PropTypes.func,
 };
 
 const TrackExtensionContainer = observer(({ activity }) => {
@@ -28,7 +29,7 @@ const TrackExtensionContainer = observer(({ activity }) => {
 });
 
 TrackExtensionContainer.propTypes = {
-  activity: React.PropTypes.object,
+  activity: PropTypes.object,
 };
 
 export default TrackExtensionContainer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function(InnerComponent) {
@@ -27,7 +28,7 @@ export default function(InnerComponent) {
   }
 
   FetchOnScrollComponent.propTypes = {
-    scrollFunction: React.PropTypes.func.isRequired,
+    scrollFunction: PropTypes.func.isRequired,
   };
 
   return FetchOnScrollComponent;

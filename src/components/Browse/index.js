@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { DEFAULT_GENRE } from '../../constants/genre';
@@ -60,12 +61,12 @@ class Browse extends React.Component {
 }
 
 Browse.wrappedComponent.propTypes = {
-  browseStore: React.PropTypes.object.isRequired,
-  entityStore: React.PropTypes.object.isRequired,
-  paginateStore: React.PropTypes.object.isRequired,
-  requestStore: React.PropTypes.object.isRequired,
-  filterStore: React.PropTypes.object.isRequired,
-  sortStore: React.PropTypes.object.isRequired,
+  browseStore: PropTypes.object.isRequired,
+  entityStore: PropTypes.object.isRequired,
+  paginateStore: PropTypes.object.isRequired,
+  requestStore: PropTypes.object.isRequired,
+  filterStore: PropTypes.object.isRequired,
+  sortStore: PropTypes.object.isRequired,
 };
 
 export default Browse;
