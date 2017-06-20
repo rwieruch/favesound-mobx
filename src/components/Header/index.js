@@ -3,10 +3,12 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import map from '../../services/map';
 import classNames from 'classnames';
-import { Link } from 'react-router';
+import { Route, Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import * as actions from '../../actions/index';
 import { GENRES, DEFAULT_GENRE } from '../../constants/genre';
 import { browse, dashboard } from '../../constants/pathnames';
+import { parse } from 'query-string';
 
 function getGenreLink(genre) {
   return browse + '?genre=' + genre;
@@ -22,9 +24,7 @@ function Logo({ genre }) {
   );
 }
 
-function MenuItem({ pathname, selectedGenre, genre }) {
-  if (pathname === dashboard) { return null; }
-
+function MenuItem({ selectedGenre, genre }) {
   const linkClass = classNames(
     'menu-item',
     {
@@ -58,48 +58,39 @@ function Logout({ onLogout }) {
 function SessionAction({ currentUser, onLogin, onLogout }) {
   return (
     <div>
-      { currentUser ? <Logout onLogout={onLogout} /> : <Login onLogin={onLogin} /> }
+      {currentUser ? <Logout onLogout={onLogout} /> : <Login onLogin={onLogin} />}
     </div>
   );
 }
 
-function MenuList({ selectedGenre, pathname }) {
+function MenuList({ selectedGenre }) {
   return (
     <div>
       {map((genre, idx) => {
-        const menuItemProps = { genre, selectedGenre, pathname };
+        const menuItemProps = { genre, selectedGenre };
         return <MenuItem key={idx} { ...menuItemProps } />;
       }, GENRES)}
     </div>
   );
 }
 
-const Header = inject(
-  'sessionStore'
-)(observer(({
-  genre,
-  pathname,
-  sessionStore
-}) => {
-  return (
-    <div className="header">
-      <div className="header-content">
-        <Logo genre={genre} />
-        <MenuList selectedGenre={genre} pathname={pathname} />
-        <SessionAction currentUser={sessionStore.user} onLogin={actions.login} onLogout={actions.logout} />
+const Header = inject('sessionStore')(
+  observer(({ location, sessionStore }) => {
+    const genre = parse(location.search).genre || DEFAULT_GENRE;
+    return (
+      <div className="header">
+        <div className="header-content">
+          <Logo genre={genre} />
+          <Route exact path={browse} render={() => <MenuList selectedGenre={genre} />} />
+          <SessionAction currentUser={sessionStore.user} onLogin={actions.login} onLogout={actions.logout} />
+        </div>
       </div>
-    </div>
-  );
-}));
+    );
+  }));
 
 Header.wrappedComponent.propTypes = {
   sessionStore: PropTypes.object,
-  genre: PropTypes.string,
-  pathname: PropTypes.string,
+  location: PropTypes.object
 };
 
-Header.wrappedComponent.defaultProps = {
-  genre: DEFAULT_GENRE
-};
-
-export default Header;
+export default withRouter(Header);

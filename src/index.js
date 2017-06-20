@@ -4,27 +4,17 @@ import SC from 'soundcloud';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import Dashboard from './components/Dashboard';
-import Browse from './components/Browse';
-import Callback from './components/Callback';
+import { BrowserRouter } from 'react-router-dom';
 import App from './components/App';
-import { browse, dashboard, callback } from './constants/pathnames';
 import * as stores from './stores';
 
 require('../styles/index.scss');
 
 ReactDOM.render(
   <Provider { ...stores }>
-    <Router history={browserHistory}>
-      <Route path="/" component={App}>
-        <IndexRoute component={Browse} />
-        <Route path={callback} component={Callback} />
-        <Route path={dashboard} component={Dashboard} />
-        <Route path={browse} component={Browse} />
-        <Route path="*" component={Browse} />
-      </Route>
-    </Router>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById('app')
 );

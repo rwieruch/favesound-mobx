@@ -6,6 +6,7 @@ import * as actions from '../../actions/index';
 import * as requestTypes from '../../constants/requestTypes';
 import Activities from '../../components/Activities';
 import StreamInteractions from '../../components/StreamInteractions';
+import { parse } from 'query-string';
 
 @inject('browseStore', 'entityStore', 'paginateStore', 'requestStore', 'filterStore', 'sortStore') @observer
 class Browse extends React.Component {
@@ -25,24 +26,27 @@ class Browse extends React.Component {
     this.fetchActivitiesByGenre();
   }
 
+  parseGenreFromLocation(location) {
+    return parse(location.search).genre || DEFAULT_GENRE;
+  }
+
   fetchActivitiesByGenre() {
     const { location, paginateStore } = this.props;
-    const genre = location.query.genre || DEFAULT_GENRE;
+    const genre = this.parseGenreFromLocation(location);
     const nextHref = paginateStore.getLinkByType(genre);
     actions.fetchActivitiesByGenre(nextHref, genre);
   }
 
   needToFetchActivities() {
     const { location, browseStore } = this.props;
-    const genre = location.query.genre || DEFAULT_GENRE;
+    const genre = this.parseGenreFromLocation(location);
     const activitiesByGenre = browseStore.getByGenre(genre);
     return (activitiesByGenre ? activitiesByGenre.toJS() : []).length < 20;
   }
 
   render() {
     const { browseStore, entityStore, requestStore, filterStore, location, sortStore } = this.props;
-    const genre = location.query.genre || DEFAULT_GENRE;
-
+    const genre = this.parseGenreFromLocation(location);
     return (
       <div className="browse">
         <StreamInteractions />
