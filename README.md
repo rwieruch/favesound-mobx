@@ -30,6 +30,16 @@ Create your own SoundCloud application:
 
 Feedback is more than appreciated via [GitHub](https://github.com/rwieruch), [Twitter](https://twitter.com/rwieruch) or my [Blog](http://www.robinwieruch.de/).
 
+## Includes
+
+* react v. 6
+* react-router v. 4
+* normalizr
+* lodash-fp
+* airbnb-extended eslint
+* enzyme v. 3
+* Soundcloud API.
+
 ## Run
 
 1. Clone Repository: `git clone git@github.com:rwieruch/favesound-mobx.git`
