@@ -1,4 +1,4 @@
-import { observable, action, map } from 'mobx';
+import { observable, action } from 'mobx';
 import { forEach } from 'lodash';
 
 class BrowseStore {
@@ -6,7 +6,7 @@ class BrowseStore {
   @observable activitiesByGenre;
 
   constructor() {
-    this.activitiesByGenre = map({});
+    this.activitiesByGenre = observable.map({});
   }
 
   @action mergeActivitiesByGenre = (genre, list) => {
