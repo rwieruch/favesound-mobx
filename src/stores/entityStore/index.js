@@ -1,4 +1,4 @@
-import { observable, action, map } from 'mobx';
+import { observable, action } from 'mobx';
 import { forEach } from 'lodash';
 
 class EntityStore {
@@ -6,7 +6,7 @@ class EntityStore {
   @observable entities;
 
   constructor() {
-    this.entities = map({});
+    this.entities = observable.map({});
   }
 
   @action syncEntities = (entity, key) => {
@@ -15,7 +15,7 @@ class EntityStore {
 
   @action mergeEntities = (key, entities) => {
     if (!this.entities.get(key)) {
-      this.entities.set(key, map({}));
+      this.entities.set(key, observable.map({}));
     }
 
     forEach(entities, (entity, entityKey) => this.entities.get(key).set(entityKey, entity));

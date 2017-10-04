@@ -1,11 +1,11 @@
-import { observable, action, map } from 'mobx';
+import { observable, action } from 'mobx';
 
 class RequestStore {
 
   @observable requests;
 
   constructor() {
-    this.requests = map({});
+    this.requests = observable.map({});
   }
 
   @action setRequestInProcess = (requestType, inProcess) => {
