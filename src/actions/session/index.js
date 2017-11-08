@@ -4,9 +4,11 @@ import { apiUrl } from '../../services/api';
 import { fetchFollowings, fetchActivities, fetchFollowers, fetchFavorites } from '../../actions/user';
 import userStore from '../../stores/userStore';
 import sessionStore from '../../stores/sessionStore';
+import requestStore from '../../stores/requestStore';
+import { AUTH } from '../../constants/requestTypes';
 
 function fetchUser() {
-  fetch(apiUrl(`me`, '?'))
+  return fetch(apiUrl(`me`, '?'))
     .then((response) => response.json())
     .then((me) => {
       sessionStore.setMe(me);
@@ -20,16 +22,17 @@ function fetchUser() {
 export function login() {
   const client_id = CLIENT_ID;
   const redirect_uri = REDIRECT_URI;
-  /* eslint-disable no-undef */
   SC.initialize({ client_id, redirect_uri });
-
+  requestStore.setRequestInProcess(AUTH, true);
   SC.connect().then((session) => {
     Cookies.set(OAUTH_TOKEN, session.oauth_token);
-
     sessionStore.setSession(session);
-    fetchUser();
+    fetchUser().then(() => {
+      requestStore.setRequestInProcess(AUTH, false);
+    });
+  }).catch(() => {
+    requestStore.setRequestInProcess(AUTH, false);
   });
-  /* eslint-enable no-undef */
 }
 
 export function logout() {
