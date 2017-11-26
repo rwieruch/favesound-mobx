@@ -1,6 +1,6 @@
 # favesound-mobx
 
-The SoundCloud Client in React + MobX made with passion -> [Demo](http://www.favesound.de/)
+The SoundCloud Client in React + MobX made with passion. [Demo](http://www.favesound.de/), [Sibling Project: favesound-redux](https://github.com/rwieruch/favesound-redux)
 
 ![FaveSound](https://s15.postimg.org/3t5581x2j/Screen_Shot_2016_08_25_at_15_18_44.png)
 
