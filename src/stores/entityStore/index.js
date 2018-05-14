@@ -23,7 +23,7 @@ class EntityStore {
 
   getEntitiesByKey(key) {
     const entities = this.entities.get(key);
-    return entities ? entities.toJS() : {};
+    return entities ? entities.toJSON() : {};
   }
 
 }
